@@ -1,0 +1,18 @@
+#compdef n nd
+
+# Completion for Node version helpers (n, nd)
+
+_node_versions() {
+  local -a versions
+  versions=(${(f)"$(nls 2>/dev/null)"})
+  _describe 'node versions' versions
+}
+
+case "$words[1]" in
+  n)
+    _node_versions
+    ;;
+  nd)
+    _node_versions
+    ;;
+esac

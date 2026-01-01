@@ -1,0 +1,79 @@
+{
+  "G": {
+    "app": "Google Chrome",
+    "process": "Google Chrome",
+    "icon": "🌐",
+    "tags": ["browser", "web", "internet"],
+    "hotkey": ["alt", "G"]
+  },
+  "B": {
+    "app": "Brave Browser",
+    "process": "Brave Browser",
+    "icon": "🌐",
+    "tags": ["browser", "web", "internet"],
+    "hotkey": ["alt", "B"]
+  },
+  "O": {
+    "app": "Microsoft Outlook",
+    "process": "Microsoft Outlook",
+    "icon": "📧",
+    "tags": ["mail", "email", "outlook"],
+    "hotkey": ["alt", "O"]
+  },
+  "V": {
+    "app": "Visual Studio Code",
+    "process": "Code",
+    "icon": "💻",
+    "tags": ["vscode", "code", "dev", "IDE"],
+    "hotkey": ["alt", "V"]
+  },
+  "S": {
+    "app": "Spotify",
+    "process": "Spotify",
+    "icon": "🎵",
+    "tags": ["music", "audio", "spotify"],
+    "hotkey": ["alt", "S"]
+  },
+  "D": {
+    "app": "DataGrip",
+    "process": "DataGrip",
+    "icon": "🗄️",
+    "tags": ["database", "sql", "db", "IDE"],
+    "hotkey": ["alt", "D"]
+  },
+  "M": {
+    "app": "Microsoft Teams",
+    "process": "Microsoft Teams",
+    "icon": "💬",
+    "tags": ["chat", "teams", "meet"],
+    "hotkey": ["alt", "M"]
+  },
+  "C": {
+    "app": "Cursor",
+    "process": "Cursor",
+    "icon": "🖱️",
+    "tags": ["code", "cursor", "dev", "IDE"],
+    "hotkey": ["alt", "C"]
+  },
+  "I": {
+    "app": "IntelliJ IDEA",
+    "process": "IntelliJ IDEA",
+    "icon": "🧠",
+    "tags": ["jetbrains", "intellij", "java", "IDE"],
+    "hotkey": ["alt", "I"]
+  },
+  "N": {
+    "app": "Notion",
+    "process": "Notion",
+    "icon": "📝",
+    "tags": ["notes", "wiki", "docs"],
+    "hotkey": ["alt", "N"]
+  },
+    "A": {
+    "app": "Android Studio",
+    "process": "Android Studio",
+    "icon": "📝",
+    "tags": ["mobile", "android", "IDE", "code"],
+    "hotkey": ["alt", "A"]
+  }
+}

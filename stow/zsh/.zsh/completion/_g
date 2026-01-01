@@ -1,0 +1,21 @@
+#compdef g
+
+# Completion for g commands
+# Uses the authoritative G_COMMANDS registry
+
+emulate -L zsh
+autoload -Uz _describe _git
+
+# Load command registry
+source "$HOME/.zsh/git/commands.zsh"
+
+local -a g_commands
+g_commands=()
+
+for cmd in $G_COMMANDS; do
+  g_commands+=("$cmd:$cmd command")
+done
+
+_arguments -C \
+  '1:command:_describe "g commands" g_commands' \
+  '*::args:_git'

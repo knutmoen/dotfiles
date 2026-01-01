@@ -1,0 +1,42 @@
+# --------------------------------------------------
+# Global Git configuration (safe to commit)
+# --------------------------------------------------
+
+[core]
+  editor = nvim
+  excludesfile = ~/.gitignore_global
+
+[pull]
+  rebase = true
+
+[init]
+  defaultBranch = main
+
+[color]
+  ui = auto
+
+# --------------------------------------------------
+# Conditional profiles
+# --------------------------------------------------
+
+# --------------------------------------------------
+# Work repos
+# --------------------------------------------------
+
+[includeIf "gitdir:~/development/projects/**"]
+  path = ~/.gitconfig-work
+
+[includeIf "gitdir:~/development/projects/**"]
+  path = ~/.gitconfig-local-work
+
+# --------------------------------------------------
+# Personal repos
+# --------------------------------------------------
+
+[includeIf "gitdir:~/development/privat/**"]
+  path = ~/.gitconfig-personal
+
+[includeIf "gitdir:~/development/privat/**"]
+  path = ~/.gitconfig-local-personal
+
+

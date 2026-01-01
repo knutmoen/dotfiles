@@ -1,0 +1,16 @@
+#compdef j jd
+
+_java_versions() {
+  local -a versions
+  versions=(${(f)"$(jls 2>/dev/null)"})
+  _describe 'java versions' versions
+}
+
+case "$words[1]" in
+  j)
+    _java_versions
+    ;;
+  jd)
+    _java_versions
+    ;;
+esac

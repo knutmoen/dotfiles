@@ -1,0 +1,15 @@
+# --------------------------------------------------
+# Local-only Git config (DO NOT COMMIT)
+# --------------------------------------------------
+
+.gitconfig-local
+.gitconfig-local-work
+.gitconfig-local-personal
+
+# --------------------------------------------------
+# Local / experimental dotfiles
+# --------------------------------------------------
+
+*.local
+*.bak
+*.tmp

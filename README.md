@@ -1,0 +1,249 @@
+# macOS dotfiles
+
+Opinionated macOS dotfiles with a **single-command bootstrap**, **modular shell setup**, and a **custom Git workflow (`g`)** optimized for daily use.
+
+This repository is designed to be:
+- deterministic
+- reproducible
+- easy to reason about
+- safe to share (no secrets committed)
+
+---
+
+## Goals
+
+- **One-command bootstrap**  
+  New machine → `./bootstrap.sh`
+
+- **Repo can live anywhere**  
+  No assumption that dotfiles live in `$HOME`
+
+- **No secrets committed**  
+  Local-only Git identity files are ignored
+
+- **Deterministic & idempotent**  
+  Safe to run bootstrap multiple times
+
+---
+
+## Requirements
+
+- macOS
+- Xcode Command Line Tools  
+  ```bash
+  xcode-select --install
+  ```
+
+---
+
+## Installation
+
+```bash
+git clone git@github.com:knselo/dotfiles.git
+cd dotfiles
+./bootstrap.sh
+```
+
+---
+
+## Repository Structure
+
+```
+dotfiles/
+├── Brewfile
+├── bootstrap.sh
+├── install/
+│   ├── homebrew.sh
+│   ├── zsh.sh
+│   ├── oh-my-zsh.sh
+│   ├── powerlevel10k.sh
+│   ├── fonts.sh
+│   └── stow.sh
+├── stow/
+│   ├── zsh/
+│   └── hammerspoon/
+│       └── .hammerspoon/
+│           ├── init.lua
+│           └── apps.json
+```
+
+---
+
+## GNU Stow model
+
+- The repository **does NOT live in `$HOME`**
+- All dotfiles are symlinked using **GNU Stow**
+- All stow operations use:
+
+```bash
+stow --target="$HOME" <package>
+```
+
+---
+
+## Shell setup
+
+- Shell: **zsh (Homebrew)**
+- Framework: **Oh My Zsh**
+- Prompt: **Powerlevel10k**
+- Plugins installed via Homebrew:
+  - `zsh-autosuggestions`
+  - `zsh-syntax-highlighting`
+
+---
+
+## Runtime management (Java, Node, …)
+
+Language runtimes are managed using a **declarative + explicit** model.
+
+### Core principles
+
+- **Brewfile is the source of truth for long-lived runtimes**
+- **Homebrew installs and uninstalls runtimes**
+- **Shell modules select the active runtime**
+- **No version managers** (`nvm`, `jenv`, `asdf`, etc.)
+- **No hidden state**
+- **All switching is shell-local**
+
+If a runtime version becomes part of daily use, it **belongs in `Brewfile`**.
+Ad-hoc `brew install` is acceptable for temporary testing.
+
+---
+
+## Application switching (Hammerspoon)
+
+Fast application switching is implemented using **Hammerspoon**, configured in a
+**data-driven and deterministic** way.
+
+### Why Hammerspoon
+
+- Explicit, scriptable behavior
+- No hidden state or heuristics
+- Works purely from hotkeys
+- Easy to reason about and refactor
+- Configuration lives in this repository
+
+This setup is intentionally **not** a window manager.
+It only handles:
+- launching applications
+- focusing existing application windows
+
+---
+
+### Configuration layout
+
+Hammerspoon is managed via GNU Stow.
+
+```
+stow/hammerspoon/
+└── .hammerspoon/
+    ├── init.lua
+    └── apps.json
+```
+
+After stowing:
+
+```
+~/.hammerspoon/
+├── init.lua      -> symlink
+└── apps.json     -> symlink
+```
+
+---
+
+### `apps.json` (declarative app map)
+
+Applications and hotkeys are defined declaratively in `apps.json`.
+
+Each entry specifies:
+- application name
+- process name
+- hotkey
+
+Example (simplified):
+
+```json
+{
+  "V": {
+    "app": "Visual Studio Code",
+    "process": "Code",
+    "hotkey": ["alt", "cmd", "V"]
+  }
+}
+```
+
+The JSON file contains **no logic** and can be edited safely without touching Lua.
+
+---
+
+### `init.lua` behavior
+
+The Hammerspoon configuration implements a single, explicit rule:
+
+> **If the application is running → focus it**  
+> **If not → launch it and focus when ready**
+
+There is:
+- no window placement logic
+- no space management
+- no auto-reload logic
+- no background watchers
+
+Reloading the configuration is done manually via the Hammerspoon menu bar,
+keeping behavior explicit and predictable.
+
+---
+
+## Git identity model
+
+Git identity is **path-based**, not global.
+
+```
+~/development/projects/   → work identity
+~/development/privat/     → personal identity
+```
+
+Uses Git-native `includeIf gitdir:` with no global identity.
+
+---
+
+## The `g` command
+
+Custom Git workflow wrapper.
+
+### Core commands
+
+| Command | Purpose |
+|------|--------|
+| `g sync` | Rebase current branch onto default |
+| `g cleanup` | Remove merged / gone local branches |
+| `g wip` | Create WIP commit |
+| `g wip --squash` | Amend last commit |
+| `g fixup` | Fixup commit + autosquash |
+| `g sq` | Squash last 2 commits |
+| `g sq N` | Squash last N commits |
+| `g review` | Review branch vs default |
+| `g bfr` | move commits from feature to bugfix branch |
+
+---
+
+## Completion
+
+- Custom completion files in `~/.zsh/completion/`
+- Fish-style autosuggestions
+- TAB accepts autosuggestion
+- TAB TAB triggers explicit completion
+
+---
+
+## Troubleshooting
+
+```bash
+git config --show-origin --list
+stow -nv zsh
+stow -nv hammerspoon
+which _g
+exec zsh
+```
+
+---
