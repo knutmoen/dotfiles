@@ -27,6 +27,7 @@ typeset -gA G_COMMAND_DISPATCH=(
   sq       g_sq
   review   g_review
   bfr      bugfix-fra-feature
+  tag      g_tag
 )
 
 # Ordered list of commands (derived, but explicit for readability)
@@ -38,4 +39,5 @@ typeset -ga G_COMMANDS=(
   sq
   review
   bfr
+  tag
 )

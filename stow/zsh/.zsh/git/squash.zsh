@@ -2,7 +2,7 @@ g_sq() {
   emulate -L zsh
   setopt LOCAL_OPTIONS NO_SH_WORD_SPLIT
 
-  local interactive=0 n base msg
+  local interactive=0 n base first msg
 
   while [[ "$1" == --* ]]; do
     case "$1" in
@@ -24,11 +24,15 @@ g_sq() {
     return 1
   }
 
+  # Commit before the squash range
   base="HEAD~$n"
+
+  # First commit IN the squash range (the one we keep the message from)
+  first="HEAD~$((n - 1))"
 
   (( interactive )) && { git rebase -i "$base"; return; }
 
-  msg=$(git log --format=%B -n 1 "$base") || return 1
+  msg=$(git log --format=%B -n 1 "$first") || return 1
   git reset --soft "$base" || return 1
   git commit -m "$msg"
 }

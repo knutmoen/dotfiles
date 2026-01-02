@@ -49,6 +49,7 @@ g() {
     rbc) git rebase --continue ;;
     rba) git rebase --abort ;; 
     rbr) git rebase -i --root ;;
+    rh) git reset --hard "${2:-HEAD}" ;;
 
     bfr) bugfix-fra-feature "$@" ;;
 
