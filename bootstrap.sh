@@ -58,7 +58,10 @@ fi
 
 echo "==> Linking dotfiles with stow"
 cd "$DOTFILES_DIR/stow"
-stow --target="$HOME" zsh
+
+for pkg in */; do
+  stow --target="$HOME" "${pkg%/}"
+done
 
 echo "✅ Dotfiles installed successfully"
 

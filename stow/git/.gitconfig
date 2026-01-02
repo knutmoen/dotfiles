@@ -16,34 +16,31 @@
   ui = auto
 
 # --------------------------------------------------
-# Conditional profiles
-# --------------------------------------------------
-
-# --------------------------------------------------
 # Dotfiles repo
 # --------------------------------------------------
 
-[includeIf "gitdir:~/dotfiles/"]
+[includeIf "gitdir:/Users/knselo/dotfiles/**"]
   path = ~/.gitconfig-personal
+
+[includeIf "gitdir:/Users/knselo/dotfiles/**"]
+  path = ~/.gitconfig-local-personal
 
 # --------------------------------------------------
 # Work repos
 # --------------------------------------------------
 
-[includeIf "gitdir:~/development/projects/**"]
+[includeIf "gitdir:/Users/knselo/development/projects/**"]
   path = ~/.gitconfig-work
 
-[includeIf "gitdir:~/development/projects/**"]
+[includeIf "gitdir:/Users/knselo/development/projects/**"]
   path = ~/.gitconfig-local-work
 
 # --------------------------------------------------
 # Personal repos
 # --------------------------------------------------
 
-[includeIf "gitdir:~/development/privat/**"]
+[includeIf "gitdir:/Users/knselo/development/privat/**"]
   path = ~/.gitconfig-personal
 
-[includeIf "gitdir:~/development/privat/**"]
+[includeIf "gitdir:/Users/knselo/development/privat/**"]
   path = ~/.gitconfig-local-personal
-
-
