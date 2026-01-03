@@ -6,8 +6,15 @@ set -euo pipefail
 # -----------------------------------------------------------------------------
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
+LOG_FILE="$DOTFILES_DIR/bootstrap.log"
+
+# Log everything to file, keep console quiet except for a few notices
+exec 3>&1
+: >"$LOG_FILE"
+exec >"$LOG_FILE" 2>&1
 
 echo "🚀 Bootstrapping dotfiles from $DOTFILES_DIR"
+echo "🔇 Running bootstrap (logs in bootstrap.log)..." >&3
 
 # -----------------------------------------------------------------------------
 # Sanity checks
@@ -70,3 +77,4 @@ echo "✅ Dotfiles installed successfully"
 
 echo
 echo "ℹ️  Restart your terminal or run: exec zsh"
+echo "✅ Bootstrap complete (see bootstrap.log)" >&3

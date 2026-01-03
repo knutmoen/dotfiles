@@ -13,3 +13,4 @@
 *.local
 *.bak
 *.tmp
+bootstrap.log

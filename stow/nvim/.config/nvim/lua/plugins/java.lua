@@ -41,8 +41,33 @@ return {
     collect_java_test("java-test")
     collect_java_test("vscode-java-test") -- legacy folder name if already installed
 
+    local function find_lombok()
+      local candidates = {
+        os.getenv("LOMBOK_JAR"),
+        "/opt/homebrew/opt/lombok/libexec/lombok.jar",
+        "/usr/local/opt/lombok/libexec/lombok.jar",
+        vim.fs.joinpath(vim.fn.stdpath("data"), "lombok", "lombok.jar"),
+        vim.fs.joinpath(root_dir, "lombok.jar"),
+      }
+      for _, path in ipairs(candidates) do
+        if path and path ~= "" and vim.uv.fs_stat(path) then
+          return path
+        end
+      end
+      return nil
+    end
+
+    local lombok = find_lombok()
+
+    local cmd = { "jdtls" }
+    if lombok then
+      table.insert(cmd, "-javaagent:" .. lombok)
+    end
+    table.insert(cmd, "-data")
+    table.insert(cmd, workspace_dir)
+
     local config = {
-      cmd = { "jdtls", "-data", workspace_dir },
+      cmd = cmd,
       root_dir = root_dir,
       capabilities = capabilities,
       settings = {
