@@ -101,4 +101,3 @@ cask "temurin@21"
 brew "node@18"
 brew "node@20"
 brew "node@25"
-

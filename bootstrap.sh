@@ -63,6 +63,9 @@ for pkg in */; do
   stow --target="$HOME" "${pkg%/}"
 done
 
+echo "==> Installing Neovim Java tools"
+source "$DOTFILES_DIR/install/nvim-java.sh"
+
 echo "✅ Dotfiles installed successfully"
 
 echo

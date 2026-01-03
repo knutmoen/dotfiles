@@ -1,12 +1,11 @@
+local theme_dir = vim.fn.stdpath("config") .. "/lua/colors"
+
 return {
-  "folke/tokyonight.nvim",
+  name = "knut-colors",
+  dir = theme_dir,
   priority = 1000,
-  opts = {
-    style = "storm",
-    transparent = false,
-  },
-  config = function(_, opts)
-    require("tokyonight").setup(opts)
-    vim.cmd.colorscheme("tokyonight")
+  lazy = false,
+  config = function()
+    require("colors.knut").load()
   end,
 }

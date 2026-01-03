@@ -12,9 +12,11 @@ return {
     {
         "<leader>e",
         function()
-            require("oil").open(vim.fn.getcwd())
+            local bufdir = vim.fn.expand("%:p:h")
+            local target = (bufdir ~= "" and vim.loop.fs_stat(bufdir)) and bufdir or vim.fn.getcwd()
+            require("oil").open(target)
         end,
-        desc = "Open explorer (project root)",
+        desc = "Open explorer (buffer dir)",
     },
   },
 

@@ -9,6 +9,11 @@ return {
   config = function()
     -- 🔌 nvim-cmp capabilities
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
+    local function on_attach(client, bufnr)
+      if client.server_capabilities.semanticTokensProvider then
+        vim.lsp.semantic_tokens.start(bufnr, client.id)
+      end
+    end
 
     -- 🟦 TypeScript / JavaScript
     vim.lsp.start({
@@ -20,6 +25,7 @@ return {
         ".git",
       }),
       capabilities = capabilities,
+      on_attach = on_attach,
     })
 
     -- 🟦 Lua (Neovim config)
@@ -28,6 +34,7 @@ return {
       cmd = { "lua-language-server" },
       root_dir = vim.fs.root(0, { ".luarc.json", ".git" }),
       capabilities = capabilities,
+      on_attach = on_attach,
       settings = {
         Lua = {
           diagnostics = {
