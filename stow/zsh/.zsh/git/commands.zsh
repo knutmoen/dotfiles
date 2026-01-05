@@ -41,3 +41,15 @@ typeset -ga G_COMMANDS=(
   bfr
   tag
 )
+
+# Short descriptions (used by g help)
+typeset -gA G_COMMAND_HELP=(
+  sync    "Fetch + rebase onto default (or pull if on default)."
+  cleanup "Prune merged/gone branches relative to default (prompts)."
+  fixup   "Create fixup commit against default and autosquash (honors --no-rebase)."
+  wip     "Create WIP commit (use --squash to amend last commit)."
+  sq      "Squash last N commits (default 2); supports --interactive."
+  review  "Show log/stat/diff vs default (modes: all|log|stat|diff)."
+  bfr     "Create bugfix branch from release/<project>-<version>, optional cherry-pick."
+  tag     "Create and push annotated tag v<version> with message."
+)

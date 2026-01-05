@@ -12,6 +12,8 @@ unalias g 2>/dev/null
 
 # Load authoritative command registry
 source "$HOME/.zsh/git/commands.zsh"
+# Load help text
+source "$HOME/.zsh/git/help.zsh"
 
 g() {
   emulate -L zsh
@@ -19,6 +21,12 @@ g() {
 
   local cmd="$1"
   shift || true
+
+  # Help first
+  if [[ "$cmd" == "help" || "$cmd" == "-h" || "$cmd" == "--help" ]]; then
+    g_help "$@"
+    return
+  fi
 
   # --------------------------------------------------
   # Registry-based g commands (authoritative)
