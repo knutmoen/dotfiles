@@ -75,5 +75,12 @@
     "icon": "📝",
     "tags": ["mobile", "android", "IDE", "code"],
     "hotkey": ["cmd", "alt", "A"]
+  },
+    "P": {
+    "app": "Postman",
+    "process": "Postman",
+    "icon": "📝",
+    "tags": ["api", "rest", "development"],
+    "hotkey": ["cmd", "alt", "P"]
   }
 }
