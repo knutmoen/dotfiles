@@ -8,6 +8,7 @@ brew "ripgrep"
 brew "fd"
 brew "bat"
 brew "jq"
+brew "openssl@3"
 brew "tree"
 
 # ==================================================

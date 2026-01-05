@@ -236,6 +236,19 @@ Custom Git workflow wrapper.
 
 ---
 
+## API testing (Okta PKCE helpers)
+
+- Local config (not committed): copy `scripts/examples/rest-pkce.env.example` → `~/.rest-pkce.env` (or `~/.config/rest-pkce.env`) and fill in your values (`OKTA_ISSUER`, `CLIENT_ID`, `USERNAME`, `PASSWORD`, `SCOPE`, `REDIRECT_URI`; optional `CACHE_FILE`, `SKEW_SECONDS`).
+- Fetch a token once: `./scripts/rest-login-pkce.sh`  
+  Reuse cached token: `./scripts/rest-login-pkce-cache.sh` (stores in `~/.cache/rest-pkce-token.json` by default).
+- Fire API calls with caching + logging: `kallrest <METHOD> <URL> [-d BODY] [-o RESP_FILE]` (alias from `stow/zsh/.zsh/aliases/dev.zsh`).  
+  - Automatically refreshes the token via `rest-login-pkce-cache.sh`.  
+  - Pretty-prints JSON if `jq` is available.  
+  - Logs headers/timing to `~/.cache/kallrest.log` (override with `KALLREST_LOG`). Optional `-o` writes the response body to a file.
+- Dependencies installed via `brew bundle`: `jq` and `openssl@3` (used by the PKCE scripts).
+
+---
+
 ## Troubleshooting
 
 ```bash

@@ -13,4 +13,6 @@
 *.local
 *.bak
 *.tmp
+rest-pkce.env
+.rest-pkce.env
 bootstrap.log

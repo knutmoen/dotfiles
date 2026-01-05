@@ -6,12 +6,17 @@ set -euo pipefail
 #   scripts/rest-login-pkce.sh                 # bare login, print token
 #   scripts/rest-login-pkce.sh https://api/... # login, then GET endpoint med Bearer-token
 
-OKTA_ISSUER="${OKTA_ISSUER:-https://app.test.nanomobil.no/oauth2/aus9fqa4ku86wYxE30x7}"
-CLIENT_ID="${CLIENT_ID:-0oa1lz7nfi1KCAQlH0x7}"
-USERNAME="${USERNAME:-ngflyt}"
-PASSWORD="${PASSWORD:-Asko1234}"
-SCOPE="${SCOPE:-openid groups profile}"
-REDIRECT_URI="${REDIRECT_URI:-https://admin.test.ngflyt.no/login/callback}"
+# Optional local config (not tracked): ~/.rest-pkce.env or ~/.config/rest-pkce.env
+for cfg in "$HOME/.rest-pkce.env" "$HOME/.config/rest-pkce.env"; do
+  [[ -f "$cfg" ]] && source "$cfg"
+done
+
+OKTA_ISSUER="${OKTA_ISSUER:-}"
+CLIENT_ID="${CLIENT_ID:-}"
+USERNAME="${USERNAME:-}"
+PASSWORD="${PASSWORD:-}"
+SCOPE="${SCOPE:-}"
+REDIRECT_URI="${REDIRECT_URI:-}"
 
 die() {
   echo "❌ $*" >&2
