@@ -25,7 +25,8 @@ fpath=("$HOME/.zsh/completion" $fpath)
 
 for file in \
   "$ZSH_CONFIG_DIR/java.zsh" \
-  "$ZSH_CONFIG_DIR/node.zsh"; do
+  "$ZSH_CONFIG_DIR/node.zsh" \
+  "$ZSH_CONFIG_DIR/tmux.zsh"; do
   [[ -r "$file" ]] && source "$file"
 done
 

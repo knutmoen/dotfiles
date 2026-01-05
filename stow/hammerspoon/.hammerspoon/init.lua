@@ -18,7 +18,7 @@
 -- ============================================================================
 
 local LAUNCH_DELAY = 1.0
-local TMUX_CMD_DELAY = 0.3
+local TMUX_CMD_DELAY = 0.5
 
 -- ---------------------------------------------------------------------------
 -- Load app configuration
@@ -66,11 +66,40 @@ end
 -- tmux helper (explicit special case)
 -- ---------------------------------------------------------------------------
 
+local function tmuxIfAvailable()
+  local _, ok = hs.execute("command -v tmux", false)
+  if not ok then
+    return
+  end
+
+  local front = hs.application.frontmostApplication()
+  if not front or front:name() ~= "iTerm2" then
+    return
+  end
+
+  -- Prefer AppleScript write-text to the front session to avoid timing issues
+  local script = [[
+    tell application "iTerm2"
+      if not (exists current window) then return
+      tell current session of current window to write text "tmux attach || tmux new"
+    end tell
+  ]]
+  local okScript = hs.osascript.applescript(script)
+  if okScript then
+    return
+  end
+
+  -- Fallback to key strokes if AppleScript failed
+  hs.timer.doAfter(0.3, function()
+    hs.eventtap.keyStrokes("tmux attach || tmux new\n")
+  end)
+end
+
 local function openTmux()
   focusOrLaunch("iTerm", "iTerm2")
 
   hs.timer.doAfter(TMUX_CMD_DELAY, function()
-    hs.eventtap.keyStrokes("tmux attach || tmux new\n")
+    tmuxIfAvailable()
   end)
 end
 
@@ -93,8 +122,7 @@ end
 -- ---------------------------------------------------------------------------
 -- tmux binding
 -- ---------------------------------------------------------------------------
-
-hs.hotkey.bind({ "alt" }, "T", openTmux)
+hs.hotkey.bind({ "cmd", "alt" }, "T", openTmux)
 
 -- ---------------------------------------------------------------------------
 -- Reload configuration

@@ -24,6 +24,8 @@ alias mvnfmt='mvn spotless:apply'
 alias mvnsite='mvn site'
 alias mvnverify='mvn verify'
 alias mvnsh='mvn dependency:tree'
+alias tmuxstatus='[ -n "$TMUX" ] && echo "i tmux" || echo "ikke i tmux"'
+alias restkall="$HOME/dotfiles/scripts/rest-kall.sh"
 
 # misc dev
 alias loc="npx sloc --format cli-table --format-option head --exclude 'build|\\.svg$\\.xml' ./"

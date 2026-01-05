@@ -1,0 +1,33 @@
+---- Config ----
+ISSUER        : https://app.test.nanomobil.no/oauth2/aus9fqa4ku86wYxE30x7
+DOMAIN        : https://app.test.nanomobil.no
+AUTH_SERVER   : aus9fqa4ku86wYxE30x7
+CLIENT_ID     : 0oa1lz7nfi1KCAQlH0x7
+USERNAME      : ngflyt
+SCOPE         : openid groups profile
+REDIRECT_URI  : https://admin.test.ngflyt.no/login/callback
+----------------
+code_verifier : SvvGl_zcNWg6l1F1TbVgaenDC199RqvMvDWaQZvFthYu4FKTVq-oGTpQPHtlVnbk
+code_challenge: WFBYDqdgg7Kk-16rm-nPSVViWkJoh3etFE462ZQ3Kuk
+➡️  Authn for sessionToken...
+✅ sessionToken mottatt
+➡️  Henter auth code (authorize)...
+✅ Auth code mottatt
+➡️  Bytter code mot access token...
+✅ access_token mottatt
+
+---- Tokens ----
+access_token (kort): eyJraWQiOiJmVENabzFV...21TbeWsA
+id_token    (kort): eyJraWQiOiJmVENabzFV...MbhAItUw
+----------------
+Eksporter for videre bruk:
+export ACCESS_TOKEN="eyJraWQiOiJmVENabzFVdXdjUS1yaWNWZDJUTThhVDlyVVFod0pOcHlQckFaaWNpSlowIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULk1OM2ZuU1YwdS01dlIwRWRxV3k0RFgyaWtrR0xjNnBidGdwSmZYSmlYb0EiLCJpc3MiOiJodHRwczovL2FwcC50ZXN0Lm5hbm9tb2JpbC5uby9vYXV0aDIvYXVzOWZxYTRrdTg2d1l4RTMweDciLCJhdWQiOiJhcGk6Ly9lbnRlcnByaXNlIiwiaWF0IjoxNzY3NjA5ODgxLCJleHAiOjE3Njc2MTM0ODEsImNpZCI6IjBvYTFsejduZmkxS0NBUWxIMHg3IiwidWlkIjoiMDB1Nm0zenZ1Q2lCb0Z6MXQweDYiLCJzY3AiOlsicHJvZmlsZSIsImdyb3VwcyIsIm9wZW5pZCJdLCJhdXRoX3RpbWUiOjE3Njc2MDk4ODAsInN1YiI6Im5nZmx5dCIsImRpc3BsYXlOYW1lIjoibmdmbHl0IG5nZmx5dCIsImdyb3VwcyI6WyJBc2tvIE9yZyIsIkFQUEdST1VQIE5HRkxZVCBCZXJlZHNrYXAiLCJFdmVyeW9uZSIsIkdST1VQX0VMUF9TS1JJViIsIkFQUEdST1VQIEFTS08gd2l0aG91dCBhc2tvLm5vIGVtYWlsIiwiR1JPVVBfTkdGTFlUX0FETUlOIiwiQVBQR1JPVVAgTkdGTFlUIFdlYiZNb2JpbCIsIkFQUEdST1VQIE5HRkxZVCBBZG1pbiIsIkFQUEdST1VQIEVMUCIsIkdST1VQX05HRkxZVF9EUklGVCIsIlNFQ0dST1VQX0VWRVJZT05FX1NBTlNfQjJCIiwiQVBQR1JPVVAgQVNLTyBSZWtsYW1hc2pvbiIsIkFQUEdST1VQIEFTS08gQWxsZSJdLCJuZ19sb2NhdGlvbiI6IlMxIn0.KmDdJpf7w-P-caY5gwMJysW-SaoQMeM_z1VJwPT0jd9_19JDVGHTlrGRiX0FEQ91hRxpp7NQPkt8vsEuPX2qk4tG69rgAD4BnOlJIMaQYtZx0URBfwHIf2E9yxuGx39kDSCpvPhXAbBZBmaMtW19ep-LxXIy1uKCbOnBArhNQehTD_1R0U7niorhBZYaoblIRIXyy1nVcwmkarXNXt_UfxfIL2mk5krkXslNUlgiNm11LYsQcn4IR3dNvdx1lb3GBtRBXW-Qeaq8oZfDoxDWMZvs7X9JmhoRMAa69Gp8SwgtlUFS6nlM6MgCqB64ZC24ZstnGh671BEsbi21TbeWsA"
+
+➡️  GET http://localhost:8001/kampanjer/java med Bearer-token
+HTTP/1.1 200 
+X-Service-Time-Ms: 51
+Content-Type: application/json;charset=utf-8
+Content-Length: 2
+Date: Mon, 05 Jan 2026 10:44:41 GMT
+
+[]
