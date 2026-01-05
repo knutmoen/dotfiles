@@ -227,6 +227,26 @@ Custom Git workflow wrapper.
 
 ---
 
+## Adding a new `g` command (how-to)
+
+Single source of truth lives in `stow/zsh/.zsh/git/commands.zsh`. To add a new `g <cmd>`:
+
+1) Implement the function  
+   - Simple git wrapper: add to `stow/zsh/.zsh/git/simple.zsh` (e.g., `g_mycmd() { git ... }`).  
+   - Advanced logic: create or reuse a file under `stow/zsh/.zsh/git/` and ensure it is sourced (the dispatcher already sources `simple.zsh`; add more `source` lines if needed).
+
+2) Register it in `commands.zsh`  
+   - `G_COMMAND_DISPATCH`: map `cmd` → function (`g_mycmd`).  
+   - `G_COMMANDS`: add `cmd` for ordering/help/completion.  
+   - `G_COMMAND_HELP`: add a short description (shown in `g help` and completion).
+
+3) Use it  
+   - `g help` will list it, and completion will pick it up automatically.
+
+This keeps `g` commands, help, and completion in sync via one registry.
+
+---
+
 ## Completion
 
 - Custom completion files in `~/.zsh/completion/`
