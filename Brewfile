@@ -10,6 +10,7 @@ brew "bat"
 brew "jq"
 brew "openssl@3"
 brew "tree"
+brew "volta"
 
 # ==================================================
 # Editors / development
@@ -96,11 +97,3 @@ brew "zsh-syntax-highlighting"
 
 cask "temurin@17"
 cask "temurin@21"
-
-# --------------------------------------------------
-# Node.js
-# --------------------------------------------------
-
-brew "node@18"
-brew "node@20"
-brew "node@25"
