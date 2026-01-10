@@ -6,6 +6,7 @@ g_st()   { git status -sb "$@"; }
 g_co()   { git checkout "$@"; }
 g_cb()   { git checkout -b "$@"; }
 g_cpr()  { git checkout -; }
+g_cp()   { git cherry-pick "$@"; }
 g_br()   { git branch "$@"; }
 g_bc()   { git branch --show-current; }
 g_b()    { git branch "$@"; }

@@ -36,6 +36,7 @@ typeset -gA G_COMMAND_DISPATCH=(
   co   g_co
   cb   g_cb
   cpr  g_cpr
+  cp   g_cp
   br   g_br
   bc   g_bc
   b    g_b
@@ -83,6 +84,7 @@ typeset -ga G_COMMANDS=(
   co
   cb
   cpr
+  cp
   br
   bc
   b
@@ -128,6 +130,7 @@ typeset -gA G_COMMAND_HELP=(
   co   "git checkout <branch>"
   cb   "git checkout -b <branch>"
   cpr  "git checkout - (previous branch)"
+  cp   "git cherry-pick <commit>"
   br   "git branch"
   bc   "git branch --show-current"
   b    "git branch"

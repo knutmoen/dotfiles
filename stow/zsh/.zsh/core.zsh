@@ -36,6 +36,7 @@ done
 
 setopt AUTO_MENU
 setopt COMPLETE_IN_WORD
+setopt COMPLETE_ALIASES
 
 zstyle ':completion:*' matcher-list \
   'm:{a-z}={A-Z}' \
