@@ -225,6 +225,17 @@ Custom Git workflow wrapper.
 | `g review` | Review branch vs default |
 | `g bfr` | move commits from feature to bugfix branch |
 
+### Workflow: bugfix branch fra feature (`g bfr` / `git bfr`)
+
+- Purpose: create `bugfix/<feature>` off `release/<project>-<version>` and optionally cherry-pick recent feature commits.
+- Preconditions: start on a `feature/*` branch; repo must know `origin`; release branch must exist locally or on `origin`.
+- Default flow (`g bfr`): detects project from `origin`, picks latest `release/<project>-YY.MM`, checks out release, creates `bugfix/<feature>`.
+- Cherry-pick: add `--cherry-pick <N>` to bring the last N commits from the feature branch; add `--include-merges` to keep merge commits (default skips them).
+- Dry-run: `--check` shows which branches/commits would be used without making changes.
+- Version override: pass `YY.MM` as the last arg to target a specific release (e.g., `g bfr 24.09`).
+- Examples: `g bfr --check`, `g bfr --cherry-pick 2`, `g bfr --cherry-pick 3 --include-merges 24.09`.
+- Conflicts during cherry-pick: resolve, then run `git cherry-pick --continue`.
+
 ---
 
 ## Adding a new `g` command (how-to)

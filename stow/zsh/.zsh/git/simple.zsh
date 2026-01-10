@@ -7,6 +7,14 @@ g_co()   { git checkout "$@"; }
 g_cb()   { git checkout -b "$@"; }
 g_cpr()  { git checkout -; }
 g_cp()   { git cherry-pick "$@"; }
+g_sp()   { git stash pop "$@"; }
+g_sl()   { git stash list "$@"; }
+g_ss()   { git stash show "$@"; }
+g_sa()   { git stash apply "$@"; }
+g_sv()   { git stash save "$@"; }
+g_sd()   { git stash drop "$@"; }
+g_sc()   { git stash clear "$@"; }
+g_sps()  { git stash push "$@"; }
 g_br()   { git branch "$@"; }
 g_bc()   { git branch --show-current; }
 g_b()    { git branch "$@"; }
