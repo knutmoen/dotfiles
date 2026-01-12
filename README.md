@@ -1,12 +1,6 @@
 # macOS dotfiles
 
-Opinionated macOS dotfiles with a **single-command bootstrap**, **modular shell setup**, and a **custom Git workflow (`g`)** optimized for daily use.
-
-This repository is designed to be:
-- deterministic
-- reproducible
-- easy to reason about
-- safe to share (no secrets committed)
+macOS dotfiles with a **single-command bootstrap**, **modular shell setup**, and a **custom Git workflow (`g`)** optimized for daily use.
 
 ---
 
@@ -106,8 +100,7 @@ Language runtimes are managed using a **declarative + explicit** model.
 - **All switching is shell-local**
 
 If a runtime version becomes part of daily use, it **belongs in `Brewfile`**.
-Ad-hoc `brew install` is acceptable for temporary testing.
-
+Ad-hoc `brew install` for temporary installs.
 ---
 
 ## Application switching (Hammerspoon)
