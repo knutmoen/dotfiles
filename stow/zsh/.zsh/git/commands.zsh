@@ -35,6 +35,8 @@ typeset -gA G_COMMAND_DISPATCH=(
   st   g_st
   co   g_co
   cb   g_cb
+  cd   g_cd
+  cdp  g_cdp
   cpr  g_cpr
   cp   g_cp
   sp   g_sp
@@ -91,6 +93,8 @@ typeset -ga G_COMMANDS=(
   st
   co
   cb
+  cd
+  cdp
   cpr
   cp
   sp
@@ -145,6 +149,8 @@ typeset -gA G_COMMAND_HELP=(
   st   "git status -sb"
   co   "git checkout <branch>"
   cb   "git checkout -b <branch>"
+  cd   "git checkout develop"
+  cdp  "git checkout develop && git pull"
   cpr  "git checkout - (previous branch)"
   cp   "git cherry-pick <commit>"
   sp   "git stash pop [<stash>]"

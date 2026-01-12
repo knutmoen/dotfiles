@@ -5,6 +5,8 @@
 g_st()   { git status -sb "$@"; }
 g_co()   { git checkout "$@"; }
 g_cb()   { git checkout -b "$@"; }
+g_cd()   { git checkout develop "$@"; }
+g_cdp()  { git checkout develop && git pull; }
 g_cpr()  { git checkout -; }
 g_cp()   { git cherry-pick "$@"; }
 g_sp()   { git stash pop "$@"; }
