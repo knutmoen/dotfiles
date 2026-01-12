@@ -33,17 +33,31 @@ __g_gone_branches() {
 }
 
 __g_select_commit() {
+  local input resolved
+
   if [[ -n "$1" ]]; then
-    echo "$1"
-    return 0
+    input="$1"
+  elif command -v fzf >/dev/null 2>&1; then
+    input=$(
+      git log --format='%H %s' |
+        fzf --height=40% --border --prompt="fixup> " |
+        awk '{print $1}'
+    )
+  else
+    input="HEAD~1"
   fi
 
-  if command -v fzf >/dev/null 2>&1; then
-    git log --oneline --color=always |
-      fzf --ansi --height=40% --border --prompt="fixup> " |
-      awk '{print $1}'
-    return 0
+  [[ -z "$input" ]] && return 1
+
+  if [[ "$input" =~ '^[0-9]+$' ]]; then
+    (( input >= 1 )) || { echo "❌ Commit number must be >=1" >&2; return 1; }
+    input="HEAD~$((input - 1))"
   fi
 
-  git rev-parse --verify HEAD~1 2>/dev/null
+  resolved=$(git rev-parse --verify "$input" 2>/dev/null) || {
+    echo "❌ Unknown commit: $input" >&2
+    return 1
+  }
+
+  echo "$resolved"
 }

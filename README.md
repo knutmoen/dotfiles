@@ -225,6 +225,18 @@ Custom Git workflow wrapper.
 | `g review` | Review branch vs default |
 | `g bfr` | move commits from feature to bugfix branch |
 
+### When to use them (quick guide)
+
+- `g sync`: Start of day eller før PR for å rebase branchen på default og unngå konflikter.
+- `g cleanup`: Rydd bort lokalt mergete eller “gone” branches; kjør jevnlig for å holde repoet ryddig.
+- `g fixup`: Rett en tidligere commit (angi hash eller velg via fzf); autosquasher inn under rebase.
+- `g wip` / `g wip --squash`: Midlertidig lagring av arbeid; `--squash` amender siste commit.
+- `g sq [N]`: Slå sammen de siste commitene før PR; `--interactive` hvis du vil endre rekkefølge/meldinger.
+- `g review [all|log|stat|diff]`: Se hva branchen din endrer vs default før code review.
+- `g bfr`: Lag bugfix-branch fra `release/<prosjekt>-<versjon>` og cherry-pick ev. feature-commits; bruk ved hotfix av release.
+- `g tag <versjon> <melding>`: Opprett/push `v<versjon>` når du shipper en release eller milepæl.
+- `g doctor`: Kjør når en `g`-kommando oppfører seg rart; validerer registry og implementationer.
+
 ### Workflow: bugfix branch fra feature (`g bfr` / `git bfr`)
 
 - Purpose: create `bugfix/<feature>` off `release/<project>-<version>` and optionally cherry-pick recent feature commits.
