@@ -50,8 +50,6 @@ nst|npm start
 prt|npm run prettier
 nrt|npm run test
 restkall|alias til scripts/rest-kall.sh
-kallrest|REST-kall med PKCE-token (kallrest <METHOD> <URL> [-d body] [-o fil])
-kallrestlog|aapne KALLREST_LOG (default ~/.cache/kallrest.log)
 loc|sloc via npx sloc
 EOF
   echo

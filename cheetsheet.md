@@ -50,13 +50,7 @@ In the menu:
 
 ## 🐚 Shell helpers (zsh)
 
-- `kallrest <METHOD> <URL> [-d BODY] [-o RESP_FILE]`  
-  Refreshes Okta token via `rest-login-pkce-cache.sh`, pretty-prints JSON (jq), logs to `~/.cache/kallrest.log`, can write response to file.
-- `kallrestlog` → Open the log in `$EDITOR` (default nvim).
-- `restkall` → Legacy script directly.
 - Navigation: `cproj` (work projects), `cpriv` (personal projects), `cgit` (git repo under `~/development`).
-
-> Copy `scripts/examples/rest-pkce.env.example` to `~/.rest-pkce.env` and fill in Okta values before using `kallrest`.
 
 ---
 
