@@ -52,6 +52,7 @@ zstyle ':completion:*' menu select
 for file in \
   "$ZSH_CONFIG_DIR/aliases/common.zsh" \
   "$ZSH_CONFIG_DIR/aliases/dev.zsh" \
+  "$ZSH_CONFIG_DIR/aliases/docker/docker.zsh" \
   "$ZSH_CONFIG_DIR/aliases/navigation.zsh"; do
   [[ -r "$file" ]] && source "$file"
 done
