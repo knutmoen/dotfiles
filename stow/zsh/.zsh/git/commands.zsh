@@ -74,6 +74,9 @@ typeset -gA G_COMMAND_DISPATCH=(
   ca   g_ca
   cae  g_cae
   c    g_c
+  - g_minus
+  sw g_switch
+  fb g_fb
 )
 
 # Ordered list of commands (derived, but explicit for readability)
@@ -132,6 +135,9 @@ typeset -ga G_COMMANDS=(
   ca
   cae
   c
+  -
+  sw
+  fb
 )
 
 # Short descriptions (used by g help)
@@ -188,4 +194,7 @@ typeset -gA G_COMMAND_HELP=(
   ca   "git commit --amend"
   cae  "git commit --amend --no-edit"
   c    "git commit -m \"...\" (or open editor if no msg)"
+  - "git switch - (previous branch)"
+  sw "git switch <branch>"
+  fb "Interactively switch git branches using fzf"
 )

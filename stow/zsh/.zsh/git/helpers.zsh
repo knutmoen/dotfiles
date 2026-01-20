@@ -61,3 +61,19 @@ __g_select_commit() {
 
   echo "$resolved"
 }
+
+git_fzf_branch_switch() {
+  local branch
+  branch=$(
+    git branch --all --color=always |
+      grep -v 'HEAD' |
+      sed 's#remotes/[^/]*/##' |
+      fzf --height 40% --ansi --no-sort --reverse \
+          --prompt="Select branch: " \
+          --query="$1"
+  )
+
+  if [[ -n "$branch" ]]; then
+    git switch "$(echo "$branch" | sed 's/^..//')"
+  fi
+}

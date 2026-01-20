@@ -27,5 +27,52 @@ alias mvnsh='mvn dependency:tree'
 alias tmuxstatus='[ -n "$TMUX" ] && echo "i tmux" || echo "ikke i tmux"'
 alias restkall="$HOME/dotfiles/scripts/rest-kall.sh"
 
-# misc dev
 alias loc="npx sloc --format cli-table --format-option head --exclude 'build|\\.svg$\\.xml' ./"
+
+mvn-auto-java() {
+  local root="${1:-.}"
+  local java_version=""
+
+  echo "🔍 Finner Java-versjon brukt av Maven-prosjektet …"
+
+  local pom
+  pom=$(find "$root" -name pom.xml | head -n 1)
+
+  if [[ -z "$pom" ]]; then
+    echo "❌ Fant ingen pom.xml"
+    return 1
+  fi
+
+  java_version=$(mvn -q -f "$pom" help:evaluate \
+    -Dexpression=maven.compiler.release \
+    -DforceStdout 2>/dev/null)
+
+  if [[ -z "$java_version" || "$java_version" == "null" ]]; then
+    java_version=$(mvn -q -f "$pom" help:evaluate \
+      -Dexpression=maven.compiler.source \
+      -DforceStdout 2>/dev/null)
+  fi
+
+  # 3️⃣ Fallback til target
+  if [[ -z "$java_version" || "$java_version" == "null" ]]; then
+    java_version=$(mvn -q -f "$pom" help:evaluate \
+      -Dexpression=maven.compiler.target \
+      -DforceStdout 2>/dev/null)
+  fi
+
+  if [[ -z "$java_version" || "$java_version" == "null" ]]; then
+    echo "❌ Klarte ikke å bestemme Java-versjon fra Maven"
+    return 1
+  fi
+
+  echo "☕ Prosjektet bruker Java $java_version"
+
+  echo "🔁 Setter Java $java_version"
+  j "$java_version" || {
+    echo "❌ Kunne ikke sette Java $java_version"
+    return 1
+  }
+
+  echo "🏗️  Kjører mvnist"
+  mvnist
+}

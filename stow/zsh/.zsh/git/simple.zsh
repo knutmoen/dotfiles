@@ -43,6 +43,9 @@ g_rh()   { git reset --hard "${1:-HEAD}"; }
 g_ci()   { git commit "$@"; }
 g_ca()   { git commit --amend "$@"; }
 g_cae()  { git commit --amend --no-edit "$@"; }
+g_minus() { git switch -; }
+g_switch() { git switch "$@"; }
+g_fb() { git_fzf_branch_switch "$@"; }
 g_c()    {
   if [[ $# -eq 0 ]]; then
     git commit
