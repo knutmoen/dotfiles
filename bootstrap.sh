@@ -57,6 +57,7 @@ source "$DOTFILES_DIR/install/stow.sh"
 if [[ -f "$DOTFILES_DIR/Brewfile" ]]; then
   echo "==> Installing Homebrew packages from Brewfile"
   brew bundle --file="$DOTFILES_DIR/Brewfile"
+  brew upgrade claude-code
 fi
 
 # -----------------------------------------------------------------------------

@@ -42,6 +42,7 @@ cask "docker-desktop"
 
 cask "brave-browser"
 cask "google-chrome"
+cask "vivaldi"
 
 # ==================================================
 # Terminal

@@ -17,8 +17,14 @@
 --   - UI / notifications
 -- ============================================================================
 
-local LAUNCH_DELAY = 1.0
+local LAUNCH_DELAY   = 1.0
 local TMUX_CMD_DELAY = 0.5
+
+-- ---------------------------------------------------------------------------
+-- Hyper key (system layer)
+-- ---------------------------------------------------------------------------
+
+local HYPER = { "ctrl", "alt", "cmd", "shift" }
 
 -- ---------------------------------------------------------------------------
 -- Load app configuration
@@ -104,31 +110,31 @@ local function openTmux()
 end
 
 -- ---------------------------------------------------------------------------
--- Hotkey bindings from apps.json
+-- Hotkey bindings (Hyper + letter from apps.json)
 -- ---------------------------------------------------------------------------
 
 for _, app in pairs(apps) do
   local hotkey = app.hotkey
   if hotkey and #hotkey >= 2 then
-    local modifiers = { table.unpack(hotkey, 1, #hotkey - 1) }
     local key = hotkey[#hotkey]
 
-    hs.hotkey.bind(modifiers, key, function()
+    hs.hotkey.bind(HYPER, key, function()
       focusOrLaunch(app.app, app.process)
     end)
   end
 end
 
 -- ---------------------------------------------------------------------------
--- tmux binding
--- ---------------------------------------------------------------------------
-hs.hotkey.bind({ "cmd", "alt" }, "T", openTmux)
-
--- ---------------------------------------------------------------------------
--- Reload configuration
+-- tmux binding (system-level)
 -- ---------------------------------------------------------------------------
 
-hs.hotkey.bind({ "alt" }, "R", function()
+hs.hotkey.bind(HYPER, "T", openTmux)
+
+-- ---------------------------------------------------------------------------
+-- Reload configuration (system-level)
+-- ---------------------------------------------------------------------------
+
+hs.hotkey.bind(HYPER, "R", function()
   hs.reload()
   hs.alert.show("Hammerspoon reloaded")
 end)

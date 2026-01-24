@@ -81,3 +81,20 @@ mvn-auto-java() {
   echo "🏗️  Kjører mvnist"
   mvnist
 }
+
+build() {
+  if [[ -f "package.json" ]]; then
+    echo "📦 Node-prosjekt funnet – kjører npm i"
+    npm i
+    return
+  fi
+
+  if [[ -f "pom.xml" ]]; then
+    echo "☕ Maven-prosjekt funnet – kjører mvn-auto-java"
+    mvn-auto-java
+    return
+  fi
+
+  echo "❌ Fant verken package.json eller pom.xml i $(pwd)"
+  return 1
+}

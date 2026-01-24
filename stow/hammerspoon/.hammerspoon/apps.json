@@ -13,6 +13,13 @@
     "tags": ["browser", "web", "internet"],
     "hotkey": ["cmd", "alt", "B"]
   },
+  "V": {
+    "app": "Vivaldi",
+    "process": "Vivaldi",
+    "icon": "🌐",
+    "tags": ["browser", "web", "internet"],
+    "hotkey": ["cmd", "alt", "V"]
+  },
   "O": {
     "app": "Microsoft Outlook",
     "process": "Microsoft Outlook",
@@ -20,12 +27,12 @@
     "tags": ["mail", "email", "outlook"],
     "hotkey": ["cmd", "alt", "O"]
   },
-  "V": {
+  "C": {
     "app": "Visual Studio Code",
     "process": "Code",
     "icon": "💻",
     "tags": ["vscode", "code", "dev", "IDE"],
-    "hotkey": ["cmd", "alt", "V"]
+    "hotkey": ["cmd", "alt", "C"]
   },
   "S": {
     "app": "Spotify",
@@ -47,13 +54,6 @@
     "icon": "💬",
     "tags": ["chat", "teams", "meet"],
     "hotkey": ["cmd", "alt", "M"]
-  },
-  "C": {
-    "app": "Cursor",
-    "process": "Cursor",
-    "icon": "🖱️",
-    "tags": ["code", "cursor", "dev", "IDE"],
-    "hotkey": ["cmd", "alt", "C"]
   },
   "I": {
     "app": "IntelliJ IDEA",
