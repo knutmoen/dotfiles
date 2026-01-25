@@ -1,6 +1,7 @@
 # macOS dotfiles
 
-macOS dotfiles with a **single-command bootstrap**, **modular shell setup**, and a **custom Git workflow (`g`)** optimized for daily use.
+macOS dotfiles with a **single-command bootstrap**, **modular shell setup**, and a
+**custom Git workflow (`g`)** optimized for daily use.
 
 ---
 
@@ -23,10 +24,14 @@ macOS dotfiles with a **single-command bootstrap**, **modular shell setup**, and
 ## Requirements
 
 - macOS
-- Xcode Command Line Tools  
-  ```bash
-  xcode-select --install
-  ```
+- Homebrew (installed automatically by bootstrap)
+- Xcode Command Line Tools (recommended, but optional)
+
+If needed, CLT can be installed manually with:
+
+```bash
+xcode-select --install
+```
 
 ---
 
@@ -37,6 +42,76 @@ git clone git@github.com:knselo/dotfiles.git
 cd dotfiles
 ./bootstrap.sh
 ```
+
+---
+
+## Bootstrap with Xcode (explicit opt-in)
+
+By default, **Xcode is NOT configured** when running `bootstrap.sh`.
+
+Xcode installation and configuration can take a long time and is therefore
+**explicitly opt-in**.
+
+### Run bootstrap *with* Xcode configuration
+
+To run bootstrap **including Xcode installation / configuration**, execute:
+
+```bash
+INSTALL_XCODE=true ./bootstrap.sh
+```
+
+This will:
+- select the correct Xcode (`xcode-select` / `xcodes`)
+- accept the Xcode license automatically
+- log all detailed output to `bootstrap.log`
+
+> ⚠️ **Important:**  
+> Xcode configuration can take several minutes, especially after a fresh
+> install or upgrade.  
+> The script will clearly indicate in the console when this step is running.
+
+### Run bootstrap *without* Xcode (default)
+
+```bash
+./bootstrap.sh
+```
+
+This will:
+- install Homebrew and packages
+- link dotfiles via GNU Stow
+- **skip all Xcode-related steps**
+
+---
+
+### Logging
+
+- All detailed output is written to:
+  ```
+  bootstrap.log
+  ```
+- The console shows only high-level progress and long-running steps
+
+This keeps bootstrap:
+- quiet and predictable during normal runs
+- easy to debug when something fails
+
+---
+
+## Migration / Adopt (important)
+
+This repository uses **GNU Stow** to manage dotfiles.
+
+If configuration files already exist in `$HOME`, bootstrap may fail during
+stowing. This is **expected on first run**.
+
+Existing configs must be **explicitly adopted** into the repository using
+one-time migration scripts.
+
+See:
+- `MIGRATION.md` for the migration model
+- `migrate/adopt-<package>.sh` for concrete adopt scripts
+
+Bootstrap will **fail loudly** if migration is required.
 
 ---
 
@@ -73,6 +148,8 @@ dotfiles/
 stow --target="$HOME" <package>
 ```
 
+Migration (`stow --adopt`) is **never automated**.
+
 ---
 
 ## Shell setup
@@ -99,176 +176,15 @@ Language runtimes are managed using a **declarative + explicit** model.
 - **No hidden state**
 - **All switching is shell-local**
 
-If a runtime version becomes part of daily use, it **belongs in `Brewfile`**.
+If a runtime version becomes part of daily use, it **belongs in `Brewfile`**.  
 Ad-hoc `brew install` for temporary installs.
+
 ---
 
 ## Application switching (Hammerspoon)
 
 Fast application switching is implemented using **Hammerspoon**, configured in a
 **data-driven and deterministic** way.
-
-### Why Hammerspoon
-
-- Explicit, scriptable behavior
-- No hidden state or heuristics
-- Works purely from hotkeys
-- Easy to reason about and refactor
-- Configuration lives in this repository
-
-This setup is intentionally **not** a window manager.
-It only handles:
-- launching applications
-- focusing existing application windows
-
----
-
-### Configuration layout
-
-Hammerspoon is managed via GNU Stow.
-
-```
-stow/hammerspoon/
-└── .hammerspoon/
-    ├── init.lua
-    └── apps.json
-```
-
-After stowing:
-
-```
-~/.hammerspoon/
-├── init.lua      -> symlink
-└── apps.json     -> symlink
-```
-
----
-
-### `apps.json` (declarative app map)
-
-Applications and hotkeys are defined declaratively in `apps.json`.
-
-Each entry specifies:
-- application name
-- process name
-- hotkey
-
-Example (simplified):
-
-```json
-{
-  "V": {
-    "app": "Visual Studio Code",
-    "process": "Code",
-    "hotkey": ["alt", "cmd", "V"]
-  }
-}
-```
-
-The JSON file contains **no logic** and can be edited safely without touching Lua.
-
----
-
-### `init.lua` behavior
-
-The Hammerspoon configuration implements a single, explicit rule:
-
-> **If the application is running → focus it**  
-> **If not → launch it and focus when ready**
-
-There is:
-- no window placement logic
-- no space management
-- no auto-reload logic
-- no background watchers
-
-Reloading the configuration is done manually via the Hammerspoon menu bar,
-keeping behavior explicit and predictable.
-
----
-
-## Git identity model
-
-Git identity is **path-based**, not global.
-
-```
-~/development/projects/   → work identity
-~/development/privat/     → personal identity
-```
-
-Uses Git-native `includeIf gitdir:` with no global identity.
-
----
-
-## The `g` command
-
-Custom Git workflow wrapper.
-
-### Core commands
-
-| Command | Purpose |
-|------|--------|
-| `g sync` | Rebase current branch onto default |
-| `g cleanup` | Remove merged / gone local branches |
-| `g wip` | Create WIP commit |
-| `g wip --squash` | Amend last commit |
-| `g fixup` | Fixup commit + autosquash |
-| `g sq` | Squash last 2 commits |
-| `g sq N` | Squash last N commits |
-| `g review` | Review branch vs default |
-| `g bfr` | move commits from feature to bugfix branch |
-
-### When to use them (quick guide)
-
-- `g sync`: Start of day eller før PR for å rebase branchen på default og unngå konflikter.
-- `g cleanup`: Rydd bort lokalt mergete eller “gone” branches; kjør jevnlig for å holde repoet ryddig.
-- `g fixup`: Rett en tidligere commit (angi hash eller velg via fzf); autosquasher inn under rebase.
-- `g wip` / `g wip --squash`: Midlertidig lagring av arbeid; `--squash` amender siste commit.
-- `g sq [N]`: Slå sammen de siste commitene før PR; `--interactive` hvis du vil endre rekkefølge/meldinger.
-- `g review [all|log|stat|diff]`: Se hva branchen din endrer vs default før code review.
-- `g bfr`: Lag bugfix-branch fra `release/<prosjekt>-<versjon>` og cherry-pick ev. feature-commits; bruk ved hotfix av release.
-- `g tag <versjon> <melding>`: Opprett/push `v<versjon>` når du shipper en release eller milepæl.
-- `g doctor`: Kjør når en `g`-kommando oppfører seg rart; validerer registry og implementationer.
-
-### Workflow: bugfix branch fra feature (`g bfr` / `git bfr`)
-
-- Purpose: create `bugfix/<feature>` off `release/<project>-<version>` and optionally cherry-pick recent feature commits.
-- Preconditions: start on a `feature/*` branch; repo must know `origin`; release branch must exist locally or on `origin`.
-- Default flow (`g bfr`): detects project from `origin`, picks latest `release/<project>-YY.MM`, checks out release, creates `bugfix/<feature>`.
-- Cherry-pick: add `--cherry-pick <N>` to bring the last N commits from the feature branch; add `--include-merges` to keep merge commits (default skips them).
-- Dry-run: `--check` shows which branches/commits would be used without making changes.
-- Version override: pass `YY.MM` as the last arg to target a specific release (e.g., `g bfr 24.09`).
-- Examples: `g bfr --check`, `g bfr --cherry-pick 2`, `g bfr --cherry-pick 3 --include-merges 24.09`.
-- Conflicts during cherry-pick: resolve, then run `git cherry-pick --continue`.
-
----
-
-## Adding a new `g` command (how-to)
-
-Single source of truth lives in `stow/zsh/.zsh/git/commands.zsh`. To add a new `g <cmd>`:
-
-1) Implement the function  
-   - Simple git wrapper: add to `stow/zsh/.zsh/git/simple.zsh` (e.g., `g_mycmd() { git ... }`).  
-   - Advanced logic: create or reuse a file under `stow/zsh/.zsh/git/` and ensure it is sourced (the dispatcher already sources `simple.zsh`; add more `source` lines if needed).
-
-2) Register it in `commands.zsh`  
-   - `G_COMMAND_DISPATCH`: map `cmd` → function (`g_mycmd`).  
-   - `G_COMMANDS`: add `cmd` for ordering/help/completion.  
-   - `G_COMMAND_HELP`: add a short description (shown in `g help` and completion).
-
-3) Use it  
-   - `g help` will list it, and completion will pick it up automatically.
-
-This keeps `g` commands, help, and completion in sync via one registry.
-
----
-
-## Completion
-
-- Custom completion files in `~/.zsh/completion/`
-- Fish-style autosuggestions
-- TAB accepts autosuggestion
-- TAB TAB triggers explicit completion
 
 ---
 

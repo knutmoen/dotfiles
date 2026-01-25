@@ -1,7 +1,8 @@
 # ==================================================
-# Core CLI tools
+# Core CLI and DEV tools
 # ==================================================
 
+brew "xcodes"
 brew "git"
 brew "fzf"
 brew "ripgrep"
@@ -11,6 +12,8 @@ brew "jq"
 brew "openssl@3"
 brew "tree"
 brew "volta"
+brew "pkg-config"
+brew "cmake"
 
 # ==================================================
 # Editors / development
@@ -33,7 +36,6 @@ cask "android-studio"
 # Containers
 # ==================================================
 
-cask "docker"
 cask "docker-desktop"
 
 # ==================================================
@@ -76,7 +78,6 @@ cask "okta"
 
 cask "postman"
 brew "maven"
-brew "tmux"
 
 # ==================================================
 # Productivity
@@ -84,6 +85,7 @@ brew "tmux"
 
 cask "raycast"
 cask "slack"
+brew "tmux"
 
 # ==================================================
 # Zsh plugins
