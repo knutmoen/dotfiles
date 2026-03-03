@@ -63,8 +63,8 @@
     "hotkey": ["cmd", "alt", "I"]
   },
   "N": {
-    "app": "Notion",
-    "process": "Notion",
+    "app": "Notes",
+    "process": "Notes",
     "icon": "📝",
     "tags": ["notes", "wiki", "docs"],
     "hotkey": ["cmd", "alt", "N"]
@@ -82,5 +82,12 @@
     "icon": "📝",
     "tags": ["api", "rest", "development"],
     "hotkey": ["cmd", "alt", "P"]
+  },
+   "J": {
+    "app": "Jottacloud",
+    "process": "Jottacloud",
+    "icon": "📊",
+    "tags": ["data", "cloud", "storage"],
+    "hotkey": ["cmd", "alt", "J"] 
   }
 }

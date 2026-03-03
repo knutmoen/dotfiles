@@ -15,3 +15,5 @@ if [[ -o login ]]; then
 fi
 
 export WORK_PROFILE=1
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH="/opt/homebrew/bin:$PATH"

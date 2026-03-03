@@ -4,6 +4,7 @@
 
 brew "xcodes"
 brew "git"
+brew "gradle"
 brew "fzf"
 brew "ripgrep"
 brew "fd"
@@ -14,6 +15,8 @@ brew "tree"
 brew "volta"
 brew "pkg-config"
 brew "cmake"
+cask "codex"
+cask "flutter"
 
 # ==================================================
 # Editors / development
@@ -24,6 +27,8 @@ brew "neovim"
 cask "visual-studio-code"
 cask "cursor"
 cask "claude-code"
+tap "anomalyco/tap"
+brew "opencode"
 
 # ==================================================
 # Mobile / Android
@@ -86,6 +91,7 @@ brew "maven"
 cask "raycast"
 cask "slack"
 brew "tmux"
+cask "jottacloud"
 
 # ==================================================
 # Zsh plugins
@@ -100,3 +106,6 @@ brew "zsh-syntax-highlighting"
 
 cask "temurin@17"
 cask "temurin@21"
+cask "temurin@25"
+
+brew "telnet"

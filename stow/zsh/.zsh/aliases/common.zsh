@@ -33,3 +33,34 @@ killport() {
   echo "Dreper: ${pids[*]}"
   kill "${pids[@]}"
 }
+
+actuator() {
+  local base_url="${ACTUATOR_BASE_URL:-http://localhost:8081/actuator}"
+  local endpoint="$1"
+
+  local url="$base_url"
+  if [[ -n "$endpoint" ]]; then
+    url="$base_url/$endpoint"
+  fi
+
+  # curl med progress-bar (ikke -s)
+  local response
+  response=$(curl -w "\n%{http_code}" "$url")
+
+  local body=$(echo "$response" | sed '$d')
+  local http_status=$(echo "$response" | tail -n1)
+
+  if [[ "$http_status" != "200" ]]; then
+    echo "❌ HTTP $http_status from $url" >&2
+    echo "$body" | jq
+    return 1
+  fi
+
+  echo "$body" | jq
+}
+
+
+actuator-links() {
+  curl -s http://localhost:8081/actuator \
+    | jq -r '._links | keys[]'
+}
