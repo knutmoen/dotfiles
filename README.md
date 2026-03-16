@@ -199,3 +199,7 @@ exec zsh
 ```
 
 ---
+
+## tmux
+
+The tmux helpers and keybindings live in [tmux.md](tmux.md). The tmux package can be stowed via `stow --target="$HOME" tmux` after bootstrap.

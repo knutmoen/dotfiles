@@ -14,6 +14,9 @@ fi
 
 export ZSH_CONFIG_DIR="$HOME/.zsh"
 
+# Load docker helper module (kept in $ZSH_CONFIG_DIR so stow can drop it into place).
+[[ -r "$ZSH_CONFIG_DIR/docker.zsh" ]] && source "$ZSH_CONFIG_DIR/docker.zsh"
+
 # -----------------------------------------------------------------------------
 # Core shell configuration
 # (PATH-agnostic: runtime policy, aliases, hooks, completion config)
@@ -63,6 +66,15 @@ bindkey '^I' autosuggest-accept
 # TAB TAB triggers completion
 bindkey '^I^I' complete-word
 fi
+
+# -----------------------------------------------------------------------------
+# tmux projects
+# -----------------------------------------------------------------------------
+
+tmux_project admin \
+  "/Users/knselo/development/projects/asko-netthandel/admin-api" \
+  "/Users/knselo/development/projects/ngf-admin/ngf-admin-web" \
+  "/Users/knselo/development/projects/ngf-admin/ngf-admin-web"
 
 # -----------------------------------------------------------------------------
 # Syntax highlighting (must be last)

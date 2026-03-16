@@ -16,3 +16,4 @@
 rest-pkce.env
 .rest-pkce.env
 bootstrap.log
+.env.docker

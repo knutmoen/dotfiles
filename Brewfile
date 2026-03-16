@@ -17,6 +17,7 @@ brew "pkg-config"
 brew "cmake"
 cask "codex"
 cask "flutter"
+brew "telnet"
 
 # ==================================================
 # Editors / development
@@ -29,6 +30,7 @@ cask "cursor"
 cask "claude-code"
 tap "anomalyco/tap"
 brew "opencode"
+cask "obsidian"
 
 # ==================================================
 # Mobile / Android
@@ -108,4 +110,10 @@ cask "temurin@17"
 cask "temurin@21"
 cask "temurin@25"
 
-brew "telnet"
+# --------------------------------------------------
+# Python
+# --------------------------------------------------
+
+cask "python"
+
+
