@@ -71,10 +71,12 @@ fi
 # tmux projects
 # -----------------------------------------------------------------------------
 
-tmux_project admin \
-  "/Users/knselo/development/projects/asko-netthandel/admin-api" \
-  "/Users/knselo/development/projects/ngf-admin/ngf-admin-web" \
-  "/Users/knselo/development/projects/ngf-admin/ngf-admin-web"
+if (( $+functions[tmux_project] )); then
+  tmux_project admin \
+    "/Users/knselo/development/projects/asko-netthandel/admin-api" \
+    "/Users/knselo/development/projects/ngf-admin/ngf-admin-web" \
+    "/Users/knselo/development/projects/ngf-admin/ngf-admin-web"
+fi
 
 # -----------------------------------------------------------------------------
 # Syntax highlighting (must be last)
