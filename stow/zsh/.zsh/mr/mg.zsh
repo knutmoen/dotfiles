@@ -15,7 +15,7 @@ __mg_repo_label() {
   branch=$(git -C "$dir" branch --show-current 2>/dev/null) || branch="(detached)"
 
   local unpushed=0
-  if git -C "$dir" rev-parse @{u} &>/dev/null 2>&1; then
+  if git -C "$dir" rev-parse @{u} &>/dev/null; then
     unpushed=$(git -C "$dir" log @{u}..HEAD --oneline 2>/dev/null | wc -l | tr -d ' ')
   fi
 
@@ -40,13 +40,13 @@ __mg_repo_label() {
 __mg_maybe_stash() {
   local dir="$1"
   if git -C "$dir" status --porcelain 2>/dev/null | grep -q .; then
-    git -C "$dir" stash push --quiet 2>/dev/null && echo "stashed" || echo ""
+    git -C "$dir" stash push --quiet && echo "stashed" || echo ""
   else
     echo ""
   fi
 }
 
-# Pop stash. Returns 1 on conflict.
+# Pop stash. Returns 1 on failure (conflict or otherwise).
 __mg_stash_pop() {
   local dir="$1"
   git -C "$dir" stash pop --quiet 2>/dev/null || return 1
@@ -116,7 +116,7 @@ EOF
 
 _mg_st() {
   local project
-  project=$(__mg_resolve_project "${1:-}") || { _mg_list; return 0; }
+  project=$(__mg_resolve_project "${1:-}") || { echo "No project inferred from current directory. Registered projects:"; _mg_list; return 0; }
   echo "● $project"
   local raw="${_MR_PROJECTS[$project]}"
   local repos=("${(s:|:)raw}")
