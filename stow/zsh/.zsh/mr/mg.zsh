@@ -208,7 +208,62 @@ _mg_branch() {
     fi
   done
 }
-_mg_co()     { echo "❌ mg co not yet implemented" >&2; return 1; }
+_mg_co() {
+  local project branch
+  if [[ $# -eq 2 ]]; then
+    project="$1"; branch="$2"
+  elif [[ $# -eq 1 ]]; then
+    branch="$1"
+  else
+    echo "Usage: mg co [project] <branch>" >&2; return 1
+  fi
+
+  project=$(__mg_resolve_project "${project:-}") || return 1
+  [[ -z "$branch" ]] && { echo "❌ Branch name required." >&2; return 1; }
+
+  echo "● $project — checkout '$branch'"
+  local raw="${_MR_PROJECTS[$project]}"
+  local repos=("${(s:|:)raw}")
+  local needs_attention=()
+  local r stashed name
+  for r in "${repos[@]}"; do
+    name="${r##*/}"
+    # Check if branch exists locally or on remote
+    local exists=0
+    git -C "$r" show-ref --verify --quiet "refs/heads/$branch" 2>/dev/null && exists=1
+    [[ "$exists" -eq 0 ]] && git -C "$r" show-ref --verify --quiet "refs/remotes/origin/$branch" 2>/dev/null && exists=1
+
+    if [[ "$exists" -eq 0 ]]; then
+      printf "  %-22s skipped (branch not found)\n" "$name"
+      continue
+    fi
+
+    stashed=$(__mg_maybe_stash "$r")
+
+    if git -C "$r" checkout "$branch" --quiet 2>/dev/null; then
+      if [[ -n "$stashed" ]]; then
+        if __mg_stash_pop "$r"; then
+          printf "  %-22s ✓ checked out (stash restored)\n" "$name"
+        else
+          printf "  %-22s ⚠️  checked out but stash pop conflicted — resolve manually\n" "$name"
+          needs_attention+=("$name")
+        fi
+      else
+        printf "  %-22s ✓ checked out\n" "$name"
+      fi
+    else
+      [[ -n "$stashed" ]] && __mg_stash_pop "$r" 2>/dev/null || true
+      printf "  %-22s ❌ checkout failed\n" "$name"
+    fi
+  done
+
+  if [[ ${#needs_attention[@]} -gt 0 ]]; then
+    echo ""
+    echo "⚠️  Needs attention:"
+    local n
+    for n in "${needs_attention[@]}"; do echo "  $n"; done
+  fi
+}
 _mg_pull()   { echo "❌ mg pull not yet implemented" >&2; return 1; }
 _mg_push()   { echo "❌ mg push not yet implemented" >&2; return 1; }
 _mg_sync()   { echo "❌ mg sync not yet implemented" >&2; return 1; }
