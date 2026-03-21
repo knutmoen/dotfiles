@@ -264,7 +264,43 @@ _mg_co() {
     for n in "${needs_attention[@]}"; do echo "  $n"; done
   fi
 }
-_mg_pull()   { echo "❌ mg pull not yet implemented" >&2; return 1; }
+_mg_pull() {
+  local project
+  project=$(__mg_resolve_project "${1:-}") || return 1
+  echo "● $project — pulling"
+  local raw="${_MR_PROJECTS[$project]}"
+  local repos=("${(s:|:)raw}")
+  local needs_attention=()
+  local r stashed name
+  for r in "${repos[@]}"; do
+    name="${r##*/}"
+    stashed=$(__mg_maybe_stash "$r")
+
+    if git -C "$r" pull --rebase --quiet 2>/dev/null; then
+      if [[ -n "$stashed" ]]; then
+        if __mg_stash_pop "$r"; then
+          printf "  %-22s ✓ pulled (stash restored)\n" "$name"
+        else
+          printf "  %-22s ⚠️  pulled but stash pop conflicted — resolve manually\n" "$name"
+          needs_attention+=("$name")
+        fi
+      else
+        printf "  %-22s ✓ pulled\n" "$name"
+      fi
+    else
+      [[ -n "$stashed" ]] && __mg_stash_pop "$r" 2>/dev/null || true
+      printf "  %-22s ❌ pull failed (no remote?)\n" "$name"
+      needs_attention+=("$name")
+    fi
+  done
+
+  if [[ ${#needs_attention[@]} -gt 0 ]]; then
+    echo ""
+    echo "⚠️  Needs attention:"
+    local n
+    for n in "${needs_attention[@]}"; do echo "  $n"; done
+  fi
+}
 _mg_push()   { echo "❌ mg push not yet implemented" >&2; return 1; }
 _mg_sync()   { echo "❌ mg sync not yet implemented" >&2; return 1; }
 
