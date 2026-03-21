@@ -49,7 +49,7 @@ __mg_maybe_stash() {
 # Pop stash. Returns 1 on conflict.
 __mg_stash_pop() {
   local dir="$1"
-  git -C "$dir" stash pop --quiet 2>/dev/null
+  git -C "$dir" stash pop --quiet 2>/dev/null || return 1
 }
 
 # Resolve project name from arg, $PWD inference, or fail.
