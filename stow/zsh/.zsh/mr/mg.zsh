@@ -150,7 +150,64 @@ _mg_fetch() {
     fi
   done
 }
-_mg_branch() { echo "❌ mg branch not yet implemented" >&2; return 1; }
+_mg_branch() {
+  local project branch skip_prompt=0
+  local args=()
+  local a
+  for a in "$@"; do
+    [[ "$a" == "--all" ]] && skip_prompt=1 || args+=("$a")
+  done
+
+  if [[ ${#args[@]} -eq 2 ]]; then
+    project="${args[1]}"; branch="${args[2]}"
+  elif [[ ${#args[@]} -eq 1 ]]; then
+    branch="${args[1]}"
+  else
+    echo "Usage: mg branch [project] <branch-name> [--all]" >&2; return 1
+  fi
+
+  project=$(__mg_resolve_project "${project:-}") || return 1
+  [[ -z "$branch" ]] && { echo "❌ Branch name required." >&2; return 1; }
+
+  echo "● $project — create branch '$branch'?"
+  local raw="${_MR_PROJECTS[$project]}"
+  local repos=("${(s:|:)raw}")
+  local r answer name current
+  for r in "${repos[@]}"; do
+    name="${r##*/}"
+    current=$(git -C "$r" branch --show-current 2>/dev/null) || current="(detached)"
+
+    if git -C "$r" show-ref --verify --quiet "refs/heads/$branch" 2>/dev/null; then
+      # Branch already exists — offer to switch
+      printf "  %-22s [%s] already exists — switch? [y/n] " "$name" "$current"
+      if [[ "$skip_prompt" -eq 1 ]]; then
+        echo "y (--all)"
+        git -C "$r" checkout "$branch" --quiet 2>/dev/null && echo "    ✓ switched" || echo "    ❌ failed"
+      else
+        read -r answer </dev/tty
+        if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+          git -C "$r" checkout "$branch" --quiet 2>/dev/null && echo "    ✓ switched" || echo "    ❌ failed"
+        else
+          echo "    skipped"
+        fi
+      fi
+    else
+      # New branch
+      printf "  %-22s [%s] create? [y/n] " "$name" "$current"
+      if [[ "$skip_prompt" -eq 1 ]]; then
+        echo "y (--all)"
+        git -C "$r" checkout -b "$branch" --quiet 2>/dev/null && echo "    ✓ created" || echo "    ❌ failed"
+      else
+        read -r answer </dev/tty
+        if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+          git -C "$r" checkout -b "$branch" --quiet 2>/dev/null && echo "    ✓ created" || echo "    ❌ failed"
+        else
+          echo "    skipped"
+        fi
+      fi
+    fi
+  done
+}
 _mg_co()     { echo "❌ mg co not yet implemented" >&2; return 1; }
 _mg_pull()   { echo "❌ mg pull not yet implemented" >&2; return 1; }
 _mg_push()   { echo "❌ mg push not yet implemented" >&2; return 1; }
