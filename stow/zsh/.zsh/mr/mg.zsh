@@ -134,7 +134,22 @@ _mg_st() {
 # Dispatcher (stub entries for Tasks 3–8 — implementations added per task)
 # ---------------------------------------------------------------------------
 
-_mg_fetch()  { echo "❌ mg fetch not yet implemented" >&2; return 1; }
+_mg_fetch() {
+  local project
+  project=$(__mg_resolve_project "${1:-}") || return 1
+  echo "● $project — fetching"
+  local raw="${_MR_PROJECTS[$project]}"
+  local repos=("${(s:|:)raw}")
+  local r
+  for r in "${repos[@]}"; do
+    printf "  %-22s" "${r##*/}"
+    if git -C "$r" fetch origin --quiet 2>/dev/null; then
+      echo "✓ fetched"
+    else
+      echo "❌ fetch failed (no remote?)"
+    fi
+  done
+}
 _mg_branch() { echo "❌ mg branch not yet implemented" >&2; return 1; }
 _mg_co()     { echo "❌ mg co not yet implemented" >&2; return 1; }
 _mg_pull()   { echo "❌ mg pull not yet implemented" >&2; return 1; }
