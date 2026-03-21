@@ -15,6 +15,10 @@ mr_project() {
   shift
   [[ $# -eq 0 ]] && { echo "mr_project: at least one path required" >&2; return 1; }
   local paths=("$@")
+  local p
+  for p in "${paths[@]}"; do
+    [[ "$p" == *\|* ]] && { echo "mr_project: path may not contain '|': $p" >&2; return 1; }
+  done
   _MR_PROJECTS[$name]="${(j:|:)paths}"
 }
 
