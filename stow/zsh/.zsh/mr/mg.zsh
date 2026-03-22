@@ -301,7 +301,45 @@ _mg_pull() {
     for n in "${needs_attention[@]}"; do echo "  $n"; done
   fi
 }
-_mg_push()   { echo "❌ mg push not yet implemented" >&2; return 1; }
+_mg_push() {
+  local project
+  project=$(__mg_resolve_project "${1:-}") || return 1
+  echo "● $project — pushing"
+  local raw="${_MR_PROJECTS[$project]}"
+  local repos=("${(s:|:)raw}")
+  local r name has_upstream unpushed
+  for r in "${repos[@]}"; do
+    name="${r##*/}"
+    has_upstream=0
+    git -C "$r" rev-parse @{u} &>/dev/null && has_upstream=1
+
+    unpushed=0
+    if [[ "$has_upstream" -eq 1 ]]; then
+      unpushed=$(git -C "$r" log @{u}..HEAD --oneline 2>/dev/null | wc -l | tr -d ' ')
+    else
+      unpushed=$(git -C "$r" log --oneline 2>/dev/null | wc -l | tr -d ' ')
+    fi
+
+    if [[ "$unpushed" -eq 0 ]]; then
+      printf "  %-22s nothing to push\n" "$name"
+      continue
+    fi
+
+    if [[ "$has_upstream" -eq 1 ]]; then
+      if git -C "$r" push --quiet 2>/dev/null; then
+        printf "  %-22s ✓ pushed\n" "$name"
+      else
+        printf "  %-22s ❌ push failed\n" "$name"
+      fi
+    else
+      if git -C "$r" push -u origin HEAD --quiet 2>/dev/null; then
+        printf "  %-22s ✓ pushed (upstream set)\n" "$name"
+      else
+        printf "  %-22s ❌ push failed (no remote?)\n" "$name"
+      fi
+    fi
+  done
+}
 _mg_sync()   { echo "❌ mg sync not yet implemented" >&2; return 1; }
 
 mg() {
