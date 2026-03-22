@@ -49,7 +49,7 @@ __mg_maybe_stash() {
 # Pop stash. Returns 1 on failure (conflict or otherwise).
 __mg_stash_pop() {
   local dir="$1"
-  git -C "$dir" stash pop --quiet 2>/dev/null || return 1
+  git -C "$dir" stash pop --quiet || return 1
 }
 
 # Like __g_default_branch but accepts a repo directory argument.
@@ -140,7 +140,7 @@ EOF
 
 _mg_st() {
   local project
-  project=$(__mg_resolve_project "${1:-}") || { echo "No project inferred from current directory. Registered projects:"; _mg_list; return 0; }
+  project=$(__mg_resolve_project "${1:-}") || { echo "No project inferred from current directory."; _mg_list; return 0; }
   echo "● $project"
   local raw="${_MR_PROJECTS[$project]}"
   local repos=("${(s:|:)raw}")
@@ -278,6 +278,7 @@ _mg_co() {
     else
       [[ -n "$stashed" ]] && __mg_stash_pop "$r" 2>/dev/null || true
       printf "  %-22s ❌ checkout failed\n" "$name"
+      needs_attention+=("$name")
     fi
   done
 
@@ -313,7 +314,7 @@ _mg_pull() {
       fi
     else
       [[ -n "$stashed" ]] && __mg_stash_pop "$r" 2>/dev/null || true
-      printf "  %-22s ❌ pull failed (no remote?)\n" "$name"
+      printf "  %-22s ❌ pull failed\n" "$name"
       needs_attention+=("$name")
     fi
   done
@@ -341,7 +342,7 @@ _mg_push() {
     if [[ "$has_upstream" -eq 1 ]]; then
       unpushed=$(git -C "$r" log @{u}..HEAD --oneline 2>/dev/null | wc -l | tr -d ' ')
     else
-      unpushed=$(git -C "$r" log --oneline 2>/dev/null | wc -l | tr -d ' ')
+      unpushed=$(git -C "$r" log HEAD --not --remotes --oneline 2>/dev/null | wc -l | tr -d ' ')
     fi
 
     if [[ "$unpushed" -eq 0 ]]; then
