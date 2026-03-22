@@ -52,6 +52,30 @@ __mg_stash_pop() {
   git -C "$dir" stash pop --quiet 2>/dev/null || return 1
 }
 
+# Like __g_default_branch but accepts a repo directory argument.
+__mg_default_branch() {
+  local dir="$1"
+  local ref
+  ref=$(git -C "$dir" symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null) || true
+  if [[ -n "$ref" ]]; then
+    echo "${ref#origin/}"
+    return 0
+  fi
+  local b
+  for b in main develop master; do
+    if git -C "$dir" show-ref --verify --quiet "refs/remotes/origin/$b" 2>/dev/null; then
+      echo "$b"; return 0
+    fi
+  done
+  # Fall back to local branches when no remote exists
+  for b in main develop master; do
+    if git -C "$dir" show-ref --verify --quiet "refs/heads/$b" 2>/dev/null; then
+      echo "$b"; return 0
+    fi
+  done
+  return 1
+}
+
 # Resolve project name from arg, $PWD inference, or fail.
 __mg_resolve_project() {
   local arg="${1:-}"
@@ -340,7 +364,60 @@ _mg_push() {
     fi
   done
 }
-_mg_sync()   { echo "❌ mg sync not yet implemented" >&2; return 1; }
+_mg_sync() {
+  local project
+  project=$(__mg_resolve_project "${1:-}") || return 1
+  echo "● $project — syncing"
+  local raw="${_MR_PROJECTS[$project]}"
+  local repos=("${(s:|:)raw}")
+  local needs_attention=()
+  local r stashed name default current ok
+  for r in "${repos[@]}"; do
+    name="${r##*/}"
+    stashed=$(__mg_maybe_stash "$r")
+
+    git -C "$r" fetch origin --quiet 2>/dev/null || true
+
+    default=$(__mg_default_branch "$r") || {
+      [[ -n "$stashed" ]] && __mg_stash_pop "$r" 2>/dev/null || true
+      printf "  %-22s ❌ could not determine default branch\n" "$name"
+      needs_attention+=("$name")
+      continue
+    }
+    current=$(git -C "$r" branch --show-current 2>/dev/null) || current=""
+
+    ok=0
+    if [[ "$current" == "$default" ]]; then
+      git -C "$r" pull --rebase --quiet 2>/dev/null && ok=1
+    else
+      git -C "$r" rebase "origin/$default" --quiet 2>/dev/null && ok=1
+    fi
+
+    if [[ "$ok" -eq 1 ]]; then
+      if [[ -n "$stashed" ]]; then
+        if __mg_stash_pop "$r"; then
+          printf "  %-22s ✓ synced (stash restored)\n" "$name"
+        else
+          printf "  %-22s ⚠️  synced but stash pop conflicted — resolve manually\n" "$name"
+          needs_attention+=("$name")
+        fi
+      else
+        printf "  %-22s ✓ synced\n" "$name"
+      fi
+    else
+      [[ -n "$stashed" ]] && __mg_stash_pop "$r" 2>/dev/null || true
+      printf "  %-22s ❌ sync failed\n" "$name"
+      needs_attention+=("$name")
+    fi
+  done
+
+  if [[ ${#needs_attention[@]} -gt 0 ]]; then
+    echo ""
+    echo "⚠️  Needs attention:"
+    local n
+    for n in "${needs_attention[@]}"; do echo "  $n"; done
+  fi
+}
 
 mg() {
   emulate -L zsh
