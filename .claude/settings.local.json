@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(zsh -c '\n  source stow/zsh/.zsh/mr/projects.zsh\n  mr_project bad \"/tmp/a|b\" \"/tmp/c\" 2>&1\n')",
+      "Bash(zsh -c '\n  source stow/zsh/.zsh/mr/projects.zsh\n  mr_project good \"/tmp/a\" \"/tmp/b\" 2>&1\n  echo \"Project registered successfully\"\n')",
+      "Bash(mkdir -p /tmp/mg-test/repo-a /tmp/mg-test/repo-b)",
+      "Bash(git -C /tmp/mg-test/repo-a init -b main)",
+      "Bash(git -C /tmp/mg-test/repo-a commit --allow-empty -m \"init\")",
+      "Bash(git -C /tmp/mg-test/repo-b init -b main)",
+      "Bash(git -C /tmp/mg-test/repo-b commit --allow-empty -m \"init\")",
+      "Bash(zsh -c '\n  source stow/zsh/.zsh/mr/projects.zsh\n  source stow/zsh/.zsh/mr/mg.zsh\n  mr_project demo \"/tmp/mg-test/repo-a\" \"/tmp/mg-test/repo-b\"\n  cd /tmp/mg-test/repo-a\n  echo \"=== Test 4: mg st \\(inferred from PWD\\) ===\"\n  mg st\n')",
+      "Bash(zsh -c '\n  source stow/zsh/.zsh/mr/projects.zsh\n  source stow/zsh/.zsh/mr/mg.zsh\n  echo \"Testing mg st with no project inferred...\"\n  mg st\n')",
+      "Bash(zsh -c '\n  source /Users/knselo/dotfiles/stow/zsh/.zsh/mr/projects.zsh\n  source /Users/knselo/dotfiles/stow/zsh/.zsh/mr/mg.zsh\n  mr_project demo \"/tmp/mg-test/repo-a\" \"/tmp/mg-test/repo-b\"\n  mg fetch demo\n')",
+      "Bash(zsh -c '\nsource stow/zsh/.zsh/mr/projects.zsh\nsource stow/zsh/.zsh/mr/mg.zsh\nmr_project demo \"/tmp/mg-test/repo-a\" \"/tmp/mg-test/repo-b\"\necho \"=== Step 3: --all creates feature/test2 on both repos ===\"\nmg branch demo feature/test2 --all\n')",
+      "Bash(zsh --no-rcs -c '\nsource /Users/knselo/dotfiles/stow/zsh/.zsh/mr/projects.zsh\nsource /Users/knselo/dotfiles/stow/zsh/.zsh/mr/mg.zsh\nmr_project demo \"/tmp/mg-test/repo-a\" \"/tmp/mg-test/repo-b\"\ngit -C /tmp/mg-test/repo-a checkout main --quiet 2>/dev/null\ngit -C /tmp/mg-test/repo-b checkout main --quiet 2>/dev/null\ngit -C /tmp/mg-test/repo-a branch -D feature/test2 2>/dev/null\ngit -C /tmp/mg-test/repo-b branch -D feature/test2 2>/dev/null\necho \"=== Step 3: --all creates feature/test2 ===\"\nmg branch demo feature/test2 --all\n')",
+      "Bash(zsh --no-rcs -c '\n_test_fn\\(\\) {\n  local r answer\n  for r in /tmp/mg-test/repo-a /tmp/mg-test/repo-b; do\n    local name=\"${r##*/}\"\n    local current\n    current=$\\(git -C \"$r\" branch --show-current 2>/dev/null\\) || current=\"\\(detached\\)\"\n    echo \"name=$name current=$current\"\n  done\n}\ngit -C /tmp/mg-test/repo-a checkout main --quiet 2>/dev/null\n_test_fn\n')",
+      "Bash(zsh --no-rcs -c '\nsource /Users/knselo/dotfiles/stow/zsh/.zsh/mr/projects.zsh\nsource /Users/knselo/dotfiles/stow/zsh/.zsh/mr/mg.zsh\nmr_project demo \"/tmp/mg-test/repo-a\" \"/tmp/mg-test/repo-b\"\necho \"=== Step 4: --all switches existing branch feature/test2 ===\"\nmg branch demo feature/test2 --all\n')",
+      "Bash(zsh -c '\n  source /Users/knselo/dotfiles/stow/zsh/.zsh/mr/projects.zsh\n  source /Users/knselo/dotfiles/stow/zsh/.zsh/mr/mg.zsh\n  mr_project demo \"/tmp/mg-test/repo-a\" \"/tmp/mg-test/repo-b\"\n  mg co demo feature/test\n')",
+      "Bash(zsh -c '\n  source /Users/knselo/dotfiles/stow/zsh/.zsh/mr/projects.zsh\n  source /Users/knselo/dotfiles/stow/zsh/.zsh/mr/mg.zsh\n  mr_project demo \"/tmp/mg-test/repo-a\" \"/tmp/mg-test/repo-b\"\n  mg co demo main\n')",
+      "Bash(git -C /tmp/mg-test/repo-a stash list)",
+      "Bash(git -C /tmp/mg-test/repo-a branch --show-current)",
+      "Bash(git -C /tmp/mg-test/repo-a status --short)",
+      "Bash(rm /tmp/mg-test/repo-a/common.txt)",
+      "Bash(git -C /tmp/mg-test/repo-a checkout -- .)",
+      "Bash(git -C /tmp/mg-test/repo-a status)",
+      "Bash(zsh -c '\n  source stow/zsh/.zsh/mr/projects.zsh\n  source stow/zsh/.zsh/mr/mg.zsh\n  mr_project demo \"/tmp/mg-test/repo-a\" \"/tmp/mg-test/repo-b\"\n  mg pull demo\n')",
+      "Bash(zsh -c '\n  source stow/zsh/.zsh/mr/projects.zsh\n  source stow/zsh/.zsh/mr/mg.zsh\n  mr_project dotfiles \"/Users/knselo/dotfiles\"\n  mg pull dotfiles\n')",
+      "Bash(git log:*)",
+      "Bash(zsh -c '\n  source stow/zsh/.zsh/mr/projects.zsh\n  source stow/zsh/.zsh/mr/mg.zsh\n  mr_project dotfiles \"/Users/knselo/dotfiles\"\n  mg sync dotfiles\n')",
+      "Bash(zsh << 'EOF'\n# Verify stow package exists\necho \"=== Checking stow package ===\"\nls -la /Users/knselo/dotfiles/stow/zsh/.zsh/mr/\n\n# Check if the symlink is in place\necho -e \"\\\\n=== Checking ~/.zsh symlink ===\"\nls -la ~/.zsh/mr/ 2>/dev/null || echo \"Not yet symlinked \\(expected until bootstrap runs\\)\"\n\n# Test with a real git repo\necho -e \"\\\\n=== Test with dotfiles repo ===\"\nexport ZSH_CONFIG_DIR=\"$HOME/.zsh\"\n\nfor file in \"$ZSH_CONFIG_DIR/mr/\"*.zsh; do\n  [[ -r \"$file\" ]] && source \"$file\"\ndone\n\nmr_project test \"/Users/knselo/dotfiles\"\nmg st test\nEOF)",
+      "Bash(git checkout:*)",
+      "Bash(git reset:*)",
+      "Bash(git restore:*)",
+      "Bash(zsh << 'EOF'\n# Source ~/.zshrc directly\nsource ~/.zshrc\n\necho \"=== Test with ~/.zshrc sourced ===\"\necho \"✓ Test 1: mg list\"\nmg\n\necho \"\"\necho \"✓ Test 2: mg st admin\"\nmg st admin\n\necho \"\"\necho \"✓ Test 3: mg fetch admin\"\nmg fetch admin\nEOF)",
+      "Bash(git -C /Users/knselo/dotfiles show b99e653:stow/zsh/.zshrc)",
+      "Bash(zsh -c '\n  source stow/zsh/.zsh/mr/projects.zsh\n  source stow/zsh/.zsh/mr/mg.zsh\n  mr_project test \"/tmp/r1\" \"/tmp/r2\"\n  echo \"=== mg \\(list\\) ===\"\n  mg\n  echo \"=== mg help ===\"\n  mg help\n  echo \"=== mg st test \\(non-existent paths\\) ===\"\n  mg st test\n  echo \"=== mg unknown ===\"\n  mg unknown 2>&1 || true\n')"
+    ]
+  }
+}

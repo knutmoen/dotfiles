@@ -24,6 +24,7 @@ brew "telnet"
 # ==================================================
 
 brew "neovim"
+brew "lazygit"
 
 cask "visual-studio-code"
 cask "cursor"
@@ -84,6 +85,7 @@ cask "okta"
 # ==================================================
 
 cask "postman"
+cask "bruno"
 brew "maven"
 
 # ==================================================

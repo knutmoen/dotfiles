@@ -70,8 +70,8 @@ tboot() {
 
 typeset -gA _TMUX_PROJECT_BACKEND
 typeset -gA _TMUX_PROJECT_FRONTEND
-
 typeset -gA _TMUX_PROJECT_AICLI
+typeset -gA _TMUX_PROJECT_WINDOWS  # extra windows: "name:dir|name:dir|..."
 
 # tmux_project <navn> <backend-dir> <frontend-dir> [ai cli-dir]
 # ai cli-dir er valgfri; faller tilbake til backend-dir hvis ikke oppgitt.
@@ -80,6 +80,13 @@ tmux_project() {
   _TMUX_PROJECT_BACKEND[$name]="$backend"
   _TMUX_PROJECT_FRONTEND[$name]="$frontend"
   _TMUX_PROJECT_AICLI[$name]="$aicli"
+}
+
+# tmux_project_window <project> <window-name> <dir>
+# Register an extra single-pane window for a project.
+tmux_project_window() {
+  local project="$1" winname="$2" dir="$3"
+  _TMUX_PROJECT_WINDOWS[$project]+="${winname}:${dir}|"
 }
 
 tp() {
@@ -95,6 +102,13 @@ tp() {
         echo "  $p"
         echo "    api:     ${_TMUX_PROJECT_BACKEND[$p]}"
         echo "    web:     ${_TMUX_PROJECT_FRONTEND[$p]}"
+        local wins="${_TMUX_PROJECT_WINDOWS[$p]}"
+        if [[ -n "$wins" ]]; then
+          for entry in ${(s:|:)wins}; do
+            [[ -z "$entry" ]] && continue
+            echo "    win:     ${entry%%:*} → ${entry#*:}"
+          done
+        fi
       done
     fi
     return
@@ -120,6 +134,19 @@ tp() {
     tmux split-window -h -t "$project" -c "$backend"   # pane: api
     tmux split-window -v -t "$project" -c "$frontend"  # pane: web
     tmux select-pane  -t "${project}:1.1"
+
+    # Create extra windows
+    local wins="${_TMUX_PROJECT_WINDOWS[$project]}"
+    if [[ -n "$wins" ]]; then
+      for entry in ${(s:|:)wins}; do
+        [[ -z "$entry" ]] && continue
+        local wname="${entry%%:*}"
+        local wdir="${entry#*:}"
+        tmux new-window -t "$project" -n "$wname" -c "$wdir"
+      done
+      tmux select-window -t "${project}:1"
+    fi
+
     if [[ -n "$TMUX" ]]; then
       tmux switch-client -t "$project"
     else

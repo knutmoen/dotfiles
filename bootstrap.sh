@@ -133,8 +133,8 @@ done
 # Post-install steps
 # -----------------------------------------------------------------------------
 
-log "==> Installing Neovim Java tools"
-source "$DOTFILES_DIR/install/nvim-java.sh"
+log "==> Bootstrapping Neovim plugins"
+source "$DOTFILES_DIR/install/nvim.sh"
 
 log "✅ Dotfiles installed successfully"
 

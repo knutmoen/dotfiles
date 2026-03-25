@@ -1,41 +1,64 @@
 return {
-  "nvim-treesitter/nvim-treesitter",
-  build = ":TSUpdate",
-  event = { "BufReadPost", "BufNewFile" },
-  cmd = { "TSInstall", "TSUpdate", "TSInstallSync" },
-  opts = {
-    ensure_installed = {
-      "lua",
-      "vim",
-      "vimdoc",
-      "bash",
-      "json",
-      "yaml",
-      "markdown",
-      "markdown_inline",
-      "java"
-    },
-    highlight = {
-      enable = true,
-    },
-    indent = {
-      enable = true,
-    },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    version = false,
+    build = ":TSUpdate",
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
+    dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+    config = function()
+      require("nvim-treesitter").setup({
+        ensure_installed = {
+          "bash", "css", "html",
+          "java", "javascript", "typescript", "tsx",
+          "json", "jsonc",
+          "lua", "luadoc",
+          "markdown", "markdown_inline",
+          "python",
+          "query", "regex",
+          "vim", "vimdoc",
+          "yaml",
+        },
+        auto_install = true,
+        highlight = {
+          enable = true,
+          additional_vim_regex_highlighting = false,
+        },
+        indent = { enable = true },
+
+        -- ── Text objects (af/if = function, ac/ic = class, etc.) ──────────
+        textobjects = {
+          select = {
+            enable    = true,
+            lookahead = true,
+            keymaps = {
+              ["af"] = "@function.outer",
+              ["if"] = "@function.inner",
+              ["ac"] = "@class.outer",
+              ["ic"] = "@class.inner",
+              ["aa"] = "@parameter.outer",
+              ["ia"] = "@parameter.inner",
+              ["ai"] = "@conditional.outer",
+              ["ii"] = "@conditional.inner",
+              ["al"] = "@loop.outer",
+              ["il"] = "@loop.inner",
+            },
+          },
+          move = {
+            enable     = true,
+            set_jumps  = true,
+            goto_next_start     = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
+            goto_next_end       = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
+            goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer" },
+            goto_previous_end   = { ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
+          },
+          swap = {
+            enable       = true,
+            swap_next    = { ["<leader>a"] = "@parameter.inner" },
+            swap_previous = { ["<leader>A"] = "@parameter.inner" },
+          },
+        },
+      })
+    end,
   },
-
-  config = function(_, opts)
-    local ok_parsers, parsers = pcall(require, "nvim-treesitter.parsers")
-    local ok_configs, configs = pcall(require, "nvim-treesitter.configs")
-    if not ok_parsers or not ok_configs then
-      return
-    end
-
-    if not parsers.ft_to_lang then
-      parsers.ft_to_lang = function(ft)
-        return vim.treesitter.language.get_lang(ft)
-      end
-    end
-
-    configs.setup(opts)
-  end,
 }
