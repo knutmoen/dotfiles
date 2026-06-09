@@ -2,6 +2,7 @@ return {
   -- ── nvim-dap: core debug adapter protocol ────────────────────────────────
   {
     "mfussenegger/nvim-dap",
+    lazy = true,
     dependencies = {
       "rcarriga/nvim-dap-ui",
       "theHamsta/nvim-dap-virtual-text",

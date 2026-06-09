@@ -64,8 +64,8 @@ tboot() {
 #   tp            → list alle registrerte prosjekter
 #   tp myapp      → opprett eller bytt til prosjektets session
 #
-# Hvert prosjekt får en egen navngitt session med layouten:
-#   ai cli (venstre) | api (høyre oppe) / web (høyre nede)
+# Hvert prosjekt får en egen navngitt session med 4 vinduer:
+#   1:nvim  2:server  3:cmds  4:codex   (bytt med Alt+1/2/3/4)
 # -----------------------------------------------------------------------------
 
 typeset -gA _TMUX_PROJECT_BACKEND
@@ -130,22 +130,22 @@ tp() {
       tmux attach -t "$project"
     fi
   else
-    tmux new-session  -d -s "$project" -c "$aicli"    # pane: ai cli
-    tmux split-window -h -t "$project" -c "$backend"   # pane: api
-    tmux split-window -v -t "$project" -c "$frontend"  # pane: web
-    tmux select-pane  -t "${project}:1.1"
+    # Window 1: nvim — editor, opens in project root
+    tmux new-session  -d -s "$project" -n "nvim"   -c "$backend"
+    tmux send-keys    -t "${project}:nvim"   "nvim ." Enter
 
-    # Create extra windows
-    local wins="${_TMUX_PROJECT_WINDOWS[$project]}"
-    if [[ -n "$wins" ]]; then
-      for entry in ${(s:|:)wins}; do
-        [[ -z "$entry" ]] && continue
-        local wname="${entry%%:*}"
-        local wdir="${entry#*:}"
-        tmux new-window -t "$project" -n "$wname" -c "$wdir"
-      done
-      tmux select-window -t "${project}:1"
-    fi
+    # Window 2: server — node/frontend server
+    tmux new-window   -t "$project" -n "server" -c "$frontend"
+
+    # Window 3: cmds — general shell in project root
+    tmux new-window   -t "$project" -n "cmds"   -c "$backend"
+
+    # Window 4: codex — AI coding session
+    tmux new-window   -t "$project" -n "codex"  -c "$backend"
+    tmux send-keys    -t "${project}:codex"  "codex" Enter
+
+    # Land on nvim
+    tmux select-window -t "${project}:nvim"
 
     if [[ -n "$TMUX" ]]; then
       tmux switch-client -t "$project"

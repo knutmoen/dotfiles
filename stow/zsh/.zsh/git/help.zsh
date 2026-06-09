@@ -26,11 +26,13 @@ g_help() {
     printf "g %s  –  %s\n" "$cmd" "${G_COMMAND_HELP[$cmd]}"
     case "$cmd" in
       sq) echo "Usage: g sq [N>=2] [--interactive|-i]" ;;
+      reset-origin) echo "Usage: g reset-origin <branch>" ;;
       review) echo "Usage: g review [all|log|stat|diff] (default: all)" ;;
       tag) echo "Usage: g tag <version> <message>  (creates v<version> and pushes)" ;;
       fixup) echo "Options: --no-rebase (skip autosquash rebase)" ;;
       wip) echo "Options: --squash (amend last commit), custom message allowed" ;;
       bfr) echo "Options: --check --cherry-pick <N> --include-merges [YY.MM] (see script for details)" ;;
+      bfl|bfd) echo "Usage: g $cmd [text]  (no argument => match branches containing feature/ or bugfix/)" ;;
       *) ;;
     esac
     return

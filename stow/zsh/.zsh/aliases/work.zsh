@@ -22,3 +22,5 @@ alias felleskomponenter="cd $WORK_PROJECTS_DIR/felleskomponenter"
 alias rek="cd $WORK_PROJECTS_DIR/rek"
 
 alias ccs='clear_chrome_session'
+
+alias ct='cat ~/.codex/session_tokens.txt'

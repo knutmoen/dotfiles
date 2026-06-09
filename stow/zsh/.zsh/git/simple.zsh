@@ -40,6 +40,21 @@ g_rbc()  { git rebase --continue "$@"; }
 g_rba()  { git rebase --abort "$@"; }
 g_rbr()  { git rebase -i --root "$@"; }
 g_rh()   { git reset --hard "${1:-HEAD}"; }
+g_reset_origin() {
+  emulate -L zsh
+  setopt LOCAL_OPTIONS NO_SH_WORD_SPLIT
+
+  local branch="$1"
+
+  if [[ -z "$branch" ]]; then
+    echo "Usage: g reset-origin <branch>"
+    return 1
+  fi
+
+  git fetch origin || return 1
+  git checkout "$branch" || return 1
+  git reset --hard "origin/$branch"
+}
 g_ci()   { git commit "$@"; }
 g_ca()   { git commit --amend "$@"; }
 g_cae()  { git commit --amend --no-edit "$@"; }

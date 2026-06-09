@@ -22,6 +22,7 @@
 typeset -gA G_COMMAND_DISPATCH=(
   # High-level workflows
   sync     g_sync
+  reset-origin g_reset_origin
   cleanup  g_cleanup
   fixup    g_fixup
   wip      g_wip
@@ -50,6 +51,8 @@ typeset -gA G_COMMAND_DISPATCH=(
   br   g_br
   bc   g_bc
   b    g_b
+  bfl  g_bfl
+  bfd  g_bfd
   bd   g_bd
   bD   g_bD
   aa   g_aa
@@ -83,6 +86,7 @@ typeset -gA G_COMMAND_DISPATCH=(
 typeset -ga G_COMMANDS=(
   # High-level workflows
   sync
+  reset-origin
   cleanup
   fixup
   wip
@@ -111,6 +115,8 @@ typeset -ga G_COMMANDS=(
   br
   bc
   b
+  bfl
+  bfd
   bd
   bD
   aa
@@ -143,6 +149,7 @@ typeset -ga G_COMMANDS=(
 # Short descriptions (used by g help)
 typeset -gA G_COMMAND_HELP=(
   sync    "Fetch + rebase onto default (or pull if on default)."
+  reset-origin "Fetch origin, checkout <branch>, and hard-reset to origin/<branch>."
   cleanup "Prune merged/gone branches relative to default (prompts)."
   fixup   "Create fixup commit against chosen commit (hash/selection) and autosquash (--no-rebase to skip)."
   wip     "Create WIP commit (use --squash to amend last commit)."
@@ -170,6 +177,8 @@ typeset -gA G_COMMAND_HELP=(
   br   "git branch"
   bc   "git branch --show-current"
   b    "git branch"
+  bfl  "List local branches matching feature/bugfix/ or branches containing the given text."
+  bfd  "Delete local branches matching feature/bugfix/ or branches containing the given text."
   bd   "git branch -d <branch>"
   bD   "git branch -D <branch>"
   aa   "git add --all"

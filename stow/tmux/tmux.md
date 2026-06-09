@@ -19,25 +19,43 @@ Dette prosjektet setter opp tmux via GNU Stow og et par helper-funksjoner i zsh.
 
 ## Prosjekter (`tp`)
 
-Registrer prosjekter i `~/.zshrc`:
+### Registrere et prosjekt
+
+Legg til i `~/.zshrc`:
 
 ```bash
-tmux_project myapp   "$HOME/projects/myapp/api"    "$HOME/projects/myapp/web"
-tmux_project otherapp "$HOME/projects/other/server" "$HOME/projects/other/client"
+tmux_project <navn> <prosjektrot> <frontend-dir>
+
+# Eksempel:
+tmux_project myapp "$HOME/projects/myapp" "$HOME/projects/myapp/web"
 ```
 
-Hvert prosjekt får sin egen navngitte session med denne layouten:
+### Starte eller bytte til et prosjekt
 
-```
-┌──────────────┬──────────────┐
-│              │     api      │
-│    ai cli    ├──────────────┤
-│              │     web      │
-└──────────────┴──────────────┘
+```bash
+tp          # list alle registrerte prosjekter
+tp myapp    # opprett session eller bytt til den (fungerer både inne og utenfor tmux)
 ```
 
-- `tp` → list alle registrerte prosjekter
-- `tp myapp` → opprett session (med layout) eller bytt til den, både inne og utenfor tmux
+`tp myapp` oppretter en navngitt session med fire vinduer:
+
+| # | Navn | Katalog | Starter automatisk |
+|---|------|---------|-------------------|
+| 1 | `nvim` | prosjektrot | `nvim .` |
+| 2 | `server` | frontend-dir | — (klar til `npm run dev` e.l.) |
+| 3 | `cmds` | prosjektrot | — (generell shell) |
+| 4 | `codex` | prosjektrot | `codex` |
+
+### Bytte mellom vinduer
+
+| Hurtigtast | Handling |
+|------------|----------|
+| `Alt+1` | Hopp til `nvim` |
+| `Alt+2` | Hopp til `server` |
+| `Alt+3` | Hopp til `cmds` |
+| `Alt+4` | Hopp til `codex` |
+| `Alt+Tab` | Bytt til forrige aktive vindu |
+| `Ctrl+a w` | Vis alle vinduer og velg |
 
 ## Oppsett og hurtigtaster fra `~/.tmux.conf`
 
@@ -57,6 +75,8 @@ Hvert prosjekt får sin egen navngitte session med denne layouten:
 | Reload config | `Ctrl+a` + `R` | laster inn `~/.tmux.conf` uten å starte tmux på nytt. |
 | Kill session | `Ctrl+a` + `&` | ber om bekreftelse før gjeldende session stenges. |
 | Copy mode (vi) | `Ctrl+a` + `[` | går inn i copy-mode med vi-bevegelser. `v` starter markering, `y` kopierer. |
+| Hopp til vindu 1–4 | `Alt+1/2/3/4` | Direkte hoppet uten prefix — brukes til prosjekt-vinduer. |
+| Forrige aktive vindu | `Alt+Tab` | Pendler mellom de to sist aktive vinduene. |
 
 ## Pane- og session-workflow
 

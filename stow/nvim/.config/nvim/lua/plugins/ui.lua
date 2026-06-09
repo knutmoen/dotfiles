@@ -89,7 +89,7 @@ return {
       { "<leader>E", "<cmd>Neotree reveal<cr>",  desc = "Explorer reveal file" },
     },
     opts = {
-      close_if_last_window = true,
+      close_if_last_window = false,
       window = {
         width = 35,
         mappings = { ["<space>"] = "none" },
