@@ -161,6 +161,21 @@ Migration (`stow --adopt`) is **never automated**.
   - `zsh-autosuggestions`
   - `zsh-syntax-highlighting`
 
+### Machine-local environment variables
+
+Secrets used by shell tools are loaded from `~/.config/dotfiles/.env`. The file
+is intentionally outside the repository and must not be committed:
+
+```bash
+mkdir -p ~/.config/dotfiles
+cp .env.example ~/.config/dotfiles/.env
+chmod 600 ~/.config/dotfiles/.env
+$EDITOR ~/.config/dotfiles/.env
+exec zsh
+```
+
+Set `ZSH_ENV_FILE` before starting zsh if a different location is preferred.
+
 ---
 
 ## Runtime management (Java, Node, …)

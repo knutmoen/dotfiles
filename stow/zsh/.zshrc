@@ -88,3 +88,16 @@ eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
 export PATH="/Users/knselo/bin:$PATH"
+
+# Machine-local environment variables (kept outside this repository).
+ZSH_ENV_FILE="${ZSH_ENV_FILE:-$HOME/.config/dotfiles/.env}"
+if [[ -r "$ZSH_ENV_FILE" ]]; then
+  # Support ordinary KEY=value .env files and export their values to child processes.
+  if [[ -o allexport ]]; then
+    source "$ZSH_ENV_FILE"
+  else
+    set -a
+    source "$ZSH_ENV_FILE"
+    set +a
+  fi
+fi

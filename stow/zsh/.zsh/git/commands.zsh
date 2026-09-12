@@ -80,6 +80,8 @@ typeset -gA G_COMMAND_DISPATCH=(
   - g_minus
   sw g_switch
   fb g_fb
+  fbd g_fbd
+  rwc g_rwc
 )
 
 # Ordered list of commands (derived, but explicit for readability)
@@ -144,6 +146,7 @@ typeset -ga G_COMMANDS=(
   -
   sw
   fb
+  fbd
 )
 
 # Short descriptions (used by g help)
@@ -177,8 +180,8 @@ typeset -gA G_COMMAND_HELP=(
   br   "git branch"
   bc   "git branch --show-current"
   b    "git branch"
-  bfl  "List local branches matching feature/bugfix/ or branches containing the given text."
-  bfd  "Delete local branches matching feature/bugfix/ or branches containing the given text."
+  bfl  "List matching local/remote branches with scope and merge status."
+  bfd  "Delete local branches containing the given branch text (required)."
   bd   "git branch -d <branch>"
   bD   "git branch -D <branch>"
   aa   "git add --all"
@@ -206,4 +209,5 @@ typeset -gA G_COMMAND_HELP=(
   - "git switch - (previous branch)"
   sw "git switch <branch>"
   fb "Interactively switch git branches using fzf"
+  fbd "Interactively delete a local git branch using fzf"
 )

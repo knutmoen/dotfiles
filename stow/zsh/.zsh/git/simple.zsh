@@ -29,7 +29,16 @@ g_df()   { git diff "$@"; }
 g_dc()   { git diff --cached "$@"; }
 g_p()    { git push "$@"; }
 g_pf()   { git push --force-with-lease "$@"; }
-g_pr()   { git push origin HEAD --force "$@"; }
+g_require_not_develop() {
+  local current_branch
+  current_branch="$(git branch --show-current 2>/dev/null)" || return 1
+
+  if [[ "$current_branch" == "develop" ]]; then
+    echo "Refusing to force push from develop."
+    return 1
+  fi
+}
+g_pr()   { g_require_not_develop && git push origin HEAD --force "$@"; }
 g_pl()   { git pull "$@"; }
 g_plr()  { git pull --rebase "$@"; }
 g_f()    { git fetch "$@"; }
@@ -61,10 +70,14 @@ g_cae()  { git commit --amend --no-edit "$@"; }
 g_minus() { git switch -; }
 g_switch() { git switch "$@"; }
 g_fb() { git_fzf_branch_switch "$@"; }
+g_fbd() { git_fzf_branch_delete "$@"; }
 g_c()    {
   if [[ $# -eq 0 ]]; then
     git commit
   else
     git commit -m "$*"
   fi
+}
+g_rwc() {
+  git_reword_commit "$@"
 }
